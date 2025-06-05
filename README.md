@@ -1,3 +1,5 @@
+![Cover](./assets/cover.png)
+
 # `picotype` Typeface
 
 A pixel font with minimal legible width and height to not have ambiguities. Very pico.
