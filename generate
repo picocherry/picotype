@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Get the directory where this script is located
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Change to the script directory
+cd "$SCRIPT_DIR"
+
+# Run the nerd fonts generation script with picotype argument
+./generate-nerd-fonts picotype
+
+# Check if the script executed successfully
+if [ $? -eq 0 ]; then
+    echo "Successfully generated all typeface variants"
+else
+    echo "Error generating typeface variants"
+    exit 1
+fi 

@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# Check if typeface name is provided
+if [ -z "$1" ]; then
+    echo "Error: Please provide the typeface name as an argument"
+    echo "Usage: $0 <typeface-name>"
+    echo "Example: $0 picotype"
+    exit 1
+fi
+
+TYPEFACE_NAME="$1"
+
+# Directory containing the original fonts
+FONT_DIR="./src/$TYPEFACE_NAME"
+# Directory for output
+OUTPUT_DIR="./build/generated/nerd/$TYPEFACE_NAME"
+
+# Check if font directory exists
+if [ ! -d "$FONT_DIR" ]; then
+    echo "Error: Font directory not found at $FONT_DIR"
+    exit 1
+fi
+
+# Check if font-patcher exists
+if [ ! -f "./patcher/font-patcher" ]; then
+    echo "Error: font-patcher script not found in patcher directory"
+    exit 1
+fi
+
+# Create output directory if it doesn't exist
+mkdir -p "$OUTPUT_DIR"
+
+# Process each variant directory
+for variant_dir in "$FONT_DIR"/*/; do
+    if [ -d "$variant_dir" ]; then
+        variant=$(basename "$variant_dir")
+        
+        # Find the TTF file in the variant directory
+        for font_file in "$variant_dir"/*.ttf; do
+            if [ -f "$font_file" ]; then
+                filename=$(basename "$font_file")
+                base_name="${filename%.*}"
+                output_name="${base_name}nerd.ttf"
+                
+                echo "Processing $filename..."
+                
+                # Run font-patcher with the specified options
+                fontforge --script ./patcher/font-patcher \
+                    --careful \
+                    --mono \
+                    --complete \
+                    --outputdir "$OUTPUT_DIR" \
+                    "$font_file"
+                    
+                if [ $? -eq 0 ]; then
+                    echo "Successfully generated $output_name"
+                else
+                    echo "Error processing $filename"
+                fi
+            fi
+        done
+    fi
+done
+
+echo "All fonts have been processed!" 
