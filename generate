@@ -6,18 +6,16 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Change to the script directory
 cd "$SCRIPT_DIR"
 
-# Function to check if a command was successful
-check_error() {
+# Funtion to check if a command was successful
+safely_generate() {
+    ./generate-nerd-fonts $1
     if [ $? -ne 0 ]; then
         echo "Error generating typeface variants"
         exit 1
     fi
 }
 
-./generate-nerd-fonts picotypepro
-check_error
-
-# ./generate-nerd-fonts picotype
-# check_error
+safely_generate picotype
+safely_generate picotypepro
 
 echo "Successfully generated all typeface variants" 
