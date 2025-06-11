@@ -1,20 +1,14 @@
 ![Cover](./assets/cover.png)
 
-# `picotype` Typeface
+# `pico` fonts
 
-A pixel font with minimal legible width and height to not have ambiguities. Very pico.
+- `picotype` typeface   
+  A 8×5 pixel font with minimal legible width and height to not have ambiguities. Very pico.
 
-## Variants
+- `picotypepro` typeface   
+  A 10×5 pixel font with a minimal legible width and height to to ensure consistent baseline for better legibility.
 
-### `picotype`
-The base pixel font with minimal width and height, designed to avoid character ambiguities.
-
-### `picotypenerd`
-A Nerd Font patched version of `picotype` that includes additional glyphs for:
-- Development icons
-- File type icons
-- Status indicators
-- And other Nerd Font symbols
+All typefaces have a nerd font patched version.
 
 ## Installation
 
