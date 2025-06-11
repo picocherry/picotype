@@ -30,17 +30,21 @@ fi
 # Create output directory if it doesn't exist
 mkdir -p "$OUTPUT_DIR"
 
-# Process each variant directory
-for variant_dir in "$FONT_DIR"/*/; do
+# Process each variant explicitly
+for variant in "regular" "bold" "black"; do
+    variant_dir="$FONT_DIR/$variant"
     if [ -d "$variant_dir" ]; then
-        variant=$(basename "$variant_dir")
+        echo "Processing variant: $variant"
         
-        # Find the TTF file in the variant directory
-        for font_file in "$variant_dir"/*.ttf; do
+        # Look for both TTF and OTF files
+        for ext in "ttf" "otf"; do
+            font_file="$variant_dir/$TYPEFACE_NAME-$variant.$ext"
             if [ -f "$font_file" ]; then
+                echo "Found font file: $font_file"
                 filename=$(basename "$font_file")
                 base_name="${filename%.*}"
-                output_name="${base_name}nerd.ttf"
+                extension="${filename##*.}"
+                output_name="${TYPEFACE_NAME}nerd-$variant.${extension}"
                 
                 echo "Processing $filename..."
                 
@@ -49,16 +53,28 @@ for variant_dir in "$FONT_DIR"/*/; do
                     --careful \
                     --mono \
                     --complete \
+                    --makegroups 0 \
                     --outputdir "$OUTPUT_DIR" \
                     "$font_file"
                     
                 if [ $? -eq 0 ]; then
-                    echo "Successfully generated $output_name"
+                    # Rename the output file to match our naming convention
+                    patched_file="$OUTPUT_DIR/${TYPEFACE_NAME}NerdFontMono-${variant}.$extension"
+                    if [ -f "$patched_file" ]; then
+                        mv "$patched_file" "$OUTPUT_DIR/$output_name"
+                        echo "Successfully generated $output_name"
+                    else
+                        echo "Error: Patched file not found at $patched_file"
+                    fi
                 else
                     echo "Error processing $filename"
                 fi
+            else
+                echo "No $ext file found at $font_file"
             fi
         done
+    else
+        echo "Warning: Variant directory $variant not found"
     fi
 done
 

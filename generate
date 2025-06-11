@@ -6,13 +6,18 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # Change to the script directory
 cd "$SCRIPT_DIR"
 
-# Run the nerd fonts generation script with picotype argument
-./generate-nerd-fonts picotype
+# Function to check if a command was successful
+check_error() {
+    if [ $? -ne 0 ]; then
+        echo "Error generating typeface variants"
+        exit 1
+    fi
+}
 
-# Check if the script executed successfully
-if [ $? -eq 0 ]; then
-    echo "Successfully generated all typeface variants"
-else
-    echo "Error generating typeface variants"
-    exit 1
-fi 
+./generate-nerd-fonts picotypepro
+check_error
+
+# ./generate-nerd-fonts picotype
+# check_error
+
+echo "Successfully generated all typeface variants" 
