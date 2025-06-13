@@ -19,7 +19,7 @@
 
 ## Nerdfonts
 
-All typefaces have a nerd font patched version. Patched with the complete
+All typefaces have a nerd font patched version. Patched with the complete icon set.
 
 ## Installation
 
