@@ -16,7 +16,7 @@ safely_generate() {
 }
 
 safely_generate picosans
-# safely_generate picotype
-# safely_generate picotypepro
+safely_generate picotype
+safely_generate picotypepro
 
 echo "Successfully generated all typeface variants" 
