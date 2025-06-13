@@ -48,6 +48,13 @@ The ./src folder structure is the following:
     └── familyname-bolditalic.ttf
 ```
 
+then run 
+
+```./build.sh```
+
+script that will add metadata so that the OS knows all the different files are of the same font family.
+build.sh will allow you to choose which font families you want to build, and the options you want to build them with. You will also be able to choose to patch with nerd fonts.
+
 ## Manual editing in FontForge
 
 1. Install [FontForge](https://fontforge.org/en-US/downloads/mac/)
