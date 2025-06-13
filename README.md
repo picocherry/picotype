@@ -34,7 +34,21 @@ All typefaces have a nerd font patched version. Patched with the complete icon s
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Editing in FontForge
+If you want to add a new font, you should add it to the ./src folder.
+The ./src folder structure is the following:
+```
+📁 familyname/
+├── 📁 regular/
+│   └── familyname-regular.ttf
+├── 📁 italic/
+│   └── familyname-italic.ttf
+├── 📁 bold/
+│   └── familyname-bold.ttf
+└── 📁 bolditalic/
+    └── familyname-bolditalic.ttf
+```
+
+## Manual editing in FontForge
 
 1. Install [FontForge](https://fontforge.org/en-US/downloads/mac/)
 2. Open the font in FontForge

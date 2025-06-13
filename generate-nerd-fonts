@@ -65,10 +65,7 @@ ls "$FONT_DIR"/*.ttf 2>/dev/null | while read -r font_file; do
             mv "$default_patched_file" "$OUTPUT_DIR/$output_name"
             echo "Successfully generated $output_name"
         else
-            echo "Error: Patched file not found at $default_patched_file"
-            # List contents of output directory to help debug
-            echo "Contents of $OUTPUT_DIR:"
-            ls -la "$OUTPUT_DIR"
+            echo "Patched file not found at $default_patched_file"
         fi
     else
         echo "Error processing $filename"
