@@ -60,7 +60,7 @@ Install python (`brew install python` on mac)
 
 run `./generate`
 
-This will generate the nerd fonts and put them in the `build/generated/nerd`.
+This will generate the nerd fonts and put them in the `/build` directory.
 
 ### Manual patching command:
 
