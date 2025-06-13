@@ -24,7 +24,7 @@ All typefaces have a nerd font patched version. Patched with the complete icon s
 ## Installation
 
 ### Manual Installation
-1. Download the font files from the `/build` directory
+1. Download the font files from the latest [release](https://github.com/picocherry/picotype/releases), or from the [`/build`](https://github.com/picocherry/picotype/tree/main/build) directory
 2. Install the fonts on your system:
    - **macOS**: Double-click the font files or use Font Book
    - **Linux**: Copy to `~/.local/share/fonts/` and run `fc-cache -f -v`
