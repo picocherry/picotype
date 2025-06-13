@@ -2,13 +2,24 @@
 
 # `pico` fonts
 
-- `picotype` typeface   
+## `picotype` typeface   
   A 8×5 pixel font with minimal legible width and height to not have ambiguities. Very pico.
 
-- `picotypepro` typeface   
+<img src="./assets/picotype.png" width=450 />  
+
+## `picotypepro` typeface   
   A 10×5 pixel font with a minimal legible width and height to to ensure consistent baseline for better legibility.
 
-All typefaces have a nerd font patched version.
+<img src="./assets/picotypepro.png" width=450 />  
+
+## `picosans` typeface
+  A 16×8 monospace sans serif pixel font with an italic version and manual kerning.
+
+  <img src="./assets/picosans.png" width=450 />  
+
+## Nerdfonts
+
+All typefaces have a nerd font patched version. Patched with the complete
 
 ## Installation
 
@@ -18,6 +29,10 @@ All typefaces have a nerd font patched version.
    - **macOS**: Double-click the font files or use Font Book
    - **Linux**: Copy to `~/.local/share/fonts/` and run `fc-cache -f -v`
    - **Windows**: Right-click and select "Install"
+
+# Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Editing in FontForge
 
@@ -47,12 +62,10 @@ run `./generate`
 
 This will generate the nerd fonts and put them in the `build/generated/nerd`.
 
-After patching, you'll need to edit it again in the  FontForge.Output the generated to `build/picotypenerd`
-
-Manual patching command:
+### Manual patching command:
 
 ```
-fontforge --script ./patcher/font-patcher --careful --mono --complete ./picotype/picotype-regular.ttf
+fontforge --script ./patcher/font-patcher --careful --mono --complete --simple ./picotype/picotype-regular.ttf
 ```
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+the `--simple` argument preservers the lowercase convention of all pico fonts so you don't need to use fontforge again

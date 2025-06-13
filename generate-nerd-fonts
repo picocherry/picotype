@@ -4,16 +4,16 @@
 if [ -z "$1" ]; then
     echo "Error: Please provide the typeface name as an argument"
     echo "Usage: $0 <typeface-name>"
-    echo "Example: $0 picotype"
+    echo "Example: $0 picosans"
     exit 1
 fi
 
 TYPEFACE_NAME="$1"
 
 # Directory containing the original fonts
-FONT_DIR="./src/$TYPEFACE_NAME"
+FONT_DIR="./build/$TYPEFACE_NAME"
 # Directory for output
-OUTPUT_DIR="./build/generated/nerd/$TYPEFACE_NAME"
+OUTPUT_DIR="./build/${TYPEFACE_NAME}nerd"
 
 # Check if font directory exists
 if [ ! -d "$FONT_DIR" ]; then
@@ -30,51 +30,48 @@ fi
 # Create output directory if it doesn't exist
 mkdir -p "$OUTPUT_DIR"
 
-# Process each variant explicitly
-for variant in "regular" "bold" "black"; do
-    variant_dir="$FONT_DIR/$variant"
-    if [ -d "$variant_dir" ]; then
-        echo "Processing variant: $variant"
+# Process each variant based on filenames
+echo "Found variants:"
+ls "$FONT_DIR"/*.ttf 2>/dev/null | while read -r font_file; do
+    filename=$(basename "$font_file")
+    base_name="${filename%.*}"
+    
+    # Extract variant from filename (e.g., picosans-regular.ttf -> regular)
+    variant=$(echo "$base_name" | sed "s/$TYPEFACE_NAME-//")
+    echo "Processing variant: $variant"
+    
+    echo "Processing $filename..."
+    
+    # Run font-patcher with the specified options
+    fontforge --script ./patcher/font-patcher \
+        --careful \
+        --mono \
+        -q \
+        --simple \
+        --complete \
+        --makegroups 0 \
+        --outputdir "$OUTPUT_DIR" \
+        "$font_file"
         
-        # Look for both TTF and OTF files
-        for ext in "ttf" "otf"; do
-            font_file="$variant_dir/$TYPEFACE_NAME-$variant.$ext"
-            if [ -f "$font_file" ]; then
-                echo "Found font file: $font_file"
-                filename=$(basename "$font_file")
-                base_name="${filename%.*}"
-                extension="${filename##*.}"
-                output_name="${TYPEFACE_NAME}nerd-$variant.${extension}"
-                
-                echo "Processing $filename..."
-                
-                # Run font-patcher with the specified options
-                fontforge --script ./patcher/font-patcher \
-                    --careful \
-                    --mono \
-                    --complete \
-                    --makegroups 0 \
-                    --outputdir "$OUTPUT_DIR" \
-                    "$font_file"
-                    
-                if [ $? -eq 0 ]; then
-                    # Rename the output file to match our naming convention
-                    patched_file="$OUTPUT_DIR/${TYPEFACE_NAME}NerdFontMono-${variant}.$extension"
-                    if [ -f "$patched_file" ]; then
-                        mv "$patched_file" "$OUTPUT_DIR/$output_name"
-                        echo "Successfully generated $output_name"
-                    else
-                        echo "Error: Patched file not found at $patched_file"
-                    fi
-                else
-                    echo "Error processing $filename"
-                fi
-            else
-                echo "No $ext file found at $font_file"
-            fi
-        done
+    if [ $? -eq 0 ]; then
+        # The patched file will be created with the default name including the variant
+        default_patched_file="$OUTPUT_DIR/${TYPEFACE_NAME}NerdFontMono-$variant.ttf"
+        # Our desired output name
+        output_name="${TYPEFACE_NAME}nerd-$variant.ttf"
+        
+        echo "Looking for patched file at: $default_patched_file"
+        if [ -f "$default_patched_file" ]; then
+            # Rename to our desired naming convention
+            mv "$default_patched_file" "$OUTPUT_DIR/$output_name"
+            echo "Successfully generated $output_name"
+        else
+            echo "Error: Patched file not found at $default_patched_file"
+            # List contents of output directory to help debug
+            echo "Contents of $OUTPUT_DIR:"
+            ls -la "$OUTPUT_DIR"
+        fi
     else
-        echo "Warning: Variant directory $variant not found"
+        echo "Error processing $filename"
     fi
 done
 

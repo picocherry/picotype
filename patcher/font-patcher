@@ -526,205 +526,283 @@ class font_patcher:
             font.fullname = font.persistent["fullname"]
         if isinstance(font.persistent["familyname"], str):
             font.familyname = font.persistent["familyname"]
-        verboseAdditionalFontNameSuffix = ""
-        additionalFontNameSuffix = ""
-        if not self.args.complete:
-            # NOTE not all symbol fonts have appended their suffix here
-            if self.args.fontawesome:
-                additionalFontNameSuffix += " A"
-                verboseAdditionalFontNameSuffix += " Plus Font Awesome"
-            if self.args.fontawesomeextension:
-                additionalFontNameSuffix += " AE"
-                verboseAdditionalFontNameSuffix += " Plus Font Awesome Extension"
-            if self.args.octicons:
-                additionalFontNameSuffix += " O"
-                verboseAdditionalFontNameSuffix += " Plus Octicons"
-            if self.args.powersymbols:
-                additionalFontNameSuffix += " PS"
-                verboseAdditionalFontNameSuffix += " Plus Power Symbols"
-            if self.args.codicons:
-                additionalFontNameSuffix += " C"
-                verboseAdditionalFontNameSuffix += " Plus Codicons"
-            if self.args.pomicons:
-                additionalFontNameSuffix += " P"
-                verboseAdditionalFontNameSuffix += " Plus Pomicons"
-            if self.args.fontlogos:
-                additionalFontNameSuffix += " L"
-                verboseAdditionalFontNameSuffix += " Plus Font Logos"
-            if self.args.material:
-                additionalFontNameSuffix += " MDI"
-                verboseAdditionalFontNameSuffix += " Plus Material Design Icons"
-            if self.args.weather:
-                additionalFontNameSuffix += " WEA"
-                verboseAdditionalFontNameSuffix += " Plus Weather Icons"
 
-        # add mono signifier to beginning of name suffix
-        if self.args.single:
-            variant_abbrev = "M"
-            variant_full = " Mono"
-        elif self.args.nonmono and not self.symbolsonly:
-            variant_abbrev = "P"
-            variant_full = " Propo"
+        # Check if simple naming is requested
+        if self.args.simple:
+            # Simple naming approach: append "nerd" to the family name
+            # Extract original family name and style
+            original_family = font.persistent["familyname"] or "Unknown"
+            original_fontname = font.persistent["fontname"] or "Unknown"
+            
+            # Get the style part from the fontname (everything after the family name)
+            style = "Regular"
+            try:
+                # Try to get style from SFNT names first
+                subFamilyTupleIndex = [x[1] for x in font.sfnt_names].index("SubFamily")
+                sfntNamesStringIDIndex = 2
+                style = font.sfnt_names[subFamilyTupleIndex][sfntNamesStringIDIndex]
+            except (IndexError, ValueError):
+                # Fallback: try to extract style from fontname
+                if '-' in original_fontname:
+                    parts = original_fontname.split('-')
+                    if len(parts) > 1:
+                        style = '-'.join(parts[1:])
+
+            # Create new names by appending "nerd"
+            new_family = original_family + "nerd"
+            new_fontname = original_family.lower() + "nerd-" + style.lower()
+            new_fullname = new_family + " " + style
+
+            # Clean up names (remove extra spaces, handle case)
+            new_family = " ".join(new_family.split())
+            new_fontname = "".join(new_fontname.split())  # Remove all spaces for PostScript name
+            new_fullname = " ".join(new_fullname.split())
+
+            # Set the font names
+            font.familyname = new_family
+            font.fontname = new_fontname
+            font.fullname = new_fullname
+
+            # Set SFNT names for maximum compatibility
+            font.appendSFNTName(str('English (US)'), str('Family'), font.familyname)
+            font.appendSFNTName(str('English (US)'), str('Preferred Family'), font.familyname)
+            font.appendSFNTName(str('English (US)'), str('Compatible Full'), font.fullname)
+            font.appendSFNTName(str('English (US)'), str('SubFamily'), style)
+            font.appendSFNTName(str('English (US)'), str('Fullname'), font.fullname)
+            font.appendSFNTName(str('English (US)'), str('PostScriptName'), font.fontname)
+            font.appendSFNTName(str('English (US)'), str('Preferred Styles'), style.lower())
         else:
-            variant_abbrev = ""
-            variant_full = ""
+            # Original complex naming logic
+            verboseAdditionalFontNameSuffix = ""
+            additionalFontNameSuffix = ""
+            if not self.args.complete:
+                # NOTE not all symbol fonts have appended their suffix here
+                if self.args.fontawesome:
+                    additionalFontNameSuffix += " A"
+                    verboseAdditionalFontNameSuffix += " Plus Font Awesome"
+                if self.args.fontawesomeextension:
+                    additionalFontNameSuffix += " AE"
+                    verboseAdditionalFontNameSuffix += " Plus Font Awesome Extension"
+                if self.args.octicons:
+                    additionalFontNameSuffix += " O"
+                    verboseAdditionalFontNameSuffix += " Plus Octicons"
+                if self.args.powersymbols:
+                    additionalFontNameSuffix += " PS"
+                    verboseAdditionalFontNameSuffix += " Plus Power Symbols"
+                if self.args.codicons:
+                    additionalFontNameSuffix += " C"
+                    verboseAdditionalFontNameSuffix += " Plus Codicons"
+                if self.args.pomicons:
+                    additionalFontNameSuffix += " P"
+                    verboseAdditionalFontNameSuffix += " Plus Pomicons"
+                if self.args.fontlogos:
+                    additionalFontNameSuffix += " L"
+                    verboseAdditionalFontNameSuffix += " Plus Font Logos"
+                if self.args.material:
+                    additionalFontNameSuffix += " MDI"
+                    verboseAdditionalFontNameSuffix += " Plus Material Design Icons"
+                if self.args.weather:
+                    additionalFontNameSuffix += " WEA"
+                    verboseAdditionalFontNameSuffix += " Plus Weather Icons"
 
-        ps_suffix = projectNameAbbreviation + variant_abbrev + additionalFontNameSuffix
-
-        # add 'Nerd Font' to beginning of name suffix
-        verboseAdditionalFontNameSuffix = " " + projectNameSingular + variant_full + verboseAdditionalFontNameSuffix
-        additionalFontNameSuffix = " " + projectNameSingular + variant_full + additionalFontNameSuffix
-
-        if FontnameParserOK and self.args.makegroups > 0:
-            user_supplied_name = False # User supplied names are kept unchanged
-            if not isinstance(self.args.force_name, str):
-                use_fullname = isinstance(font.fullname, str) # Usually the fullname is better to parse
-                # Use fullname if it is 'equal' to the fontname
-                if font.fullname:
-                    use_fullname |= font.fontname.lower() == FontnameTools.postscript_char_filter(font.fullname).lower()
-                # Use fullname for any of these source fonts (that are impossible to disentangle from the fontname, we need the blanks)
-                for hit in [ 'Meslo' ]:
-                    use_fullname |= font.fontname.lower().startswith(hit.lower())
-                parser_name = font.fullname if use_fullname else font.fontname
-                # Gohu fontnames hide the weight, but the file names are ok...
-                if parser_name.startswith('Gohu'):
-                    parser_name = os.path.splitext(os.path.basename(self.args.font))[0]
+            # add mono signifier to beginning of name suffix
+            if self.args.single:
+                variant_abbrev = "M"
+                variant_full = " Mono"
+            elif self.args.nonmono and not self.symbolsonly:
+                variant_abbrev = "P"
+                variant_full = " Propo"
             else:
-                if self.args.force_name == 'full':
-                    parser_name = font.fullname
-                elif self.args.force_name == 'postscript':
-                    parser_name = font.fontname
-                elif self.args.force_name == 'filename':
-                    parser_name = os.path.basename(font.path).split('.')[0]
+                variant_abbrev = ""
+                variant_full = ""
+
+            ps_suffix = projectNameAbbreviation + variant_abbrev + additionalFontNameSuffix
+
+            # add 'Nerd Font' to beginning of name suffix
+            verboseAdditionalFontNameSuffix = " " + projectNameSingular + variant_full + verboseAdditionalFontNameSuffix
+            additionalFontNameSuffix = " " + projectNameSingular + variant_full + additionalFontNameSuffix
+
+            if FontnameParserOK and self.args.makegroups > 0:
+                user_supplied_name = False # User supplied names are kept unchanged
+                if not isinstance(self.args.force_name, str):
+                    use_fullname = isinstance(font.fullname, str) # Usually the fullname is better to parse
+                    # Use fullname if it is 'equal' to the fontname
+                    if font.fullname:
+                        use_fullname |= font.fontname.lower() == FontnameTools.postscript_char_filter(font.fullname).lower()
+                    # Use fullname for any of these source fonts (that are impossible to disentangle from the fontname, we need the blanks)
+                    for hit in [ 'Meslo' ]:
+                        use_fullname |= font.fontname.lower().startswith(hit.lower())
+                    parser_name = font.fullname if use_fullname else font.fontname
+                    # Gohu fontnames hide the weight, but the file names are ok...
+                    if parser_name.startswith('Gohu'):
+                        parser_name = os.path.splitext(os.path.basename(self.args.font))[0]
                 else:
-                    parser_name = self.args.force_name
-                    user_supplied_name = True
-                if not isinstance(parser_name, str) or len(parser_name) < 1:
-                    logger.critical("Specified --name not usable because the name will be empty")
-                    sys.exit(2)
-            n = FontnameParser(parser_name, logger)
-            if not n.parse_ok:
-                logger.warning("Have only minimal naming information, check resulting name. Maybe specify --makegroups 0")
-            n.drop_for_powerline()
-            n.enable_short_families(not user_supplied_name, self.args.makegroups in [ 2, 3, 5, 6, ], self.args.makegroups in [ 3, 6, ])
-            if not n.set_expect_no_italic(self.args.noitalic):
-                logger.critical("Detected 'Italic' slant but --has-no-italic specified")
-                sys.exit(1)
+                    if self.args.force_name == 'full':
+                        parser_name = font.fullname
+                    elif self.args.force_name == 'postscript':
+                        parser_name = font.fontname
+                    elif self.args.force_name == 'filename':
+                        parser_name = os.path.basename(font.path).split('.')[0]
+                    else:
+                        parser_name = self.args.force_name
+                        user_supplied_name = True
+                    if not isinstance(parser_name, str) or len(parser_name) < 1:
+                        logger.critical("Specified --name not usable because the name will be empty")
+                        sys.exit(2)
+                n = FontnameParser(parser_name, logger)
+                if not n.parse_ok:
+                    logger.warning("Have only minimal naming information, check resulting name. Maybe specify --makegroups 0")
+                n.drop_for_powerline()
+                n.enable_short_families(not user_supplied_name, self.args.makegroups in [ 2, 3, 5, 6, ], self.args.makegroups in [ 3, 6, ])
+                if not n.set_expect_no_italic(self.args.noitalic):
+                    logger.critical("Detected 'Italic' slant but --has-no-italic specified")
+                    sys.exit(1)
 
-            # All the following stuff is ignored in makegroups-mode
+                # All the following stuff is ignored in makegroups-mode
 
-        # basically split the font name around the dash "-" to get the fontname and the style (e.g. Bold)
-        # this does not seem very reliable so only use the style here as a fallback if the font does not
-        # have an internal style defined (in sfnt_names)
-        # using '([^-]*?)' to get the item before the first dash "-"
-        # using '([^-]*(?!.*-))' to get the item after the last dash "-"
-        fontname, fallbackStyle = re.match("^([^-]*).*?([^-]*(?!.*-))$", font.fontname).groups()
+            # basically split the font name around the dash "-" to get the fontname and the style (e.g. Bold)
+            # this does not seem very reliable so only use the style here as a fallback if the font does not
+            # have an internal style defined (in sfnt_names)
+            # using '([^-]*?)' to get the item before the first dash "-"
+            # using '([^-]*(?!.*-))' to get the item after the last dash "-"
+            fontname, fallbackStyle = re.match("^([^-]*).*?([^-]*(?!.*-))$", font.fontname).groups()
 
-        # dont trust 'font.familyname'
-        familyname = fontname
+            # dont trust 'font.familyname'
+            familyname = fontname
 
-        # fullname (filename) can always use long/verbose font name, even in windows
-        if font.fullname != None:
-            fullname = font.fullname + verboseAdditionalFontNameSuffix
-        else:
-            fullname = font.cidfontname + verboseAdditionalFontNameSuffix
+            # fullname (filename) can always use long/verbose font name, even in windows
+            if font.fullname != None:
+                fullname = font.fullname + verboseAdditionalFontNameSuffix
+            else:
+                fullname = font.cidfontname + verboseAdditionalFontNameSuffix
 
-        fontname = fontname + additionalFontNameSuffix.replace(" ", "")
+            fontname = fontname + additionalFontNameSuffix.replace(" ", "")
 
-        # let us try to get the 'style' from the font info in sfnt_names and fallback to the
-        # parse fontname if it fails:
-        try:
-            # search tuple:
-            subFamilyTupleIndex = [x[1] for x in font.sfnt_names].index("SubFamily")
+            # let us try to get the 'style' from the font info in sfnt_names and fallback to the
+            # parse fontname if it fails:
+            try:
+                # search tuple:
+                subFamilyTupleIndex = [x[1] for x in font.sfnt_names].index("SubFamily")
 
-            # String ID is at the second index in the Tuple lists
-            sfntNamesStringIDIndex = 2
+                # String ID is at the second index in the Tuple lists
+                sfntNamesStringIDIndex = 2
 
-            # now we have the correct item:
-            subFamily = font.sfnt_names[subFamilyTupleIndex][sfntNamesStringIDIndex]
-        except IndexError:
-            sys.stderr.write("{}: Could not find 'SubFamily' for given font, falling back to parsed fontname\n".format(projectName))
-            subFamily = fallbackStyle
+                # now we have the correct item:
+                subFamily = font.sfnt_names[subFamilyTupleIndex][sfntNamesStringIDIndex]
+            except IndexError:
+                sys.stderr.write("{}: Could not find 'SubFamily' for given font, falling back to parsed fontname\n".format(projectName))
+                subFamily = fallbackStyle
 
-        # some fonts have inaccurate 'SubFamily', if it is Regular let us trust the filename more:
-        if subFamily == "Regular" and len(fallbackStyle):
-            subFamily = fallbackStyle
+            # some fonts have inaccurate 'SubFamily', if it is Regular let us trust the filename more:
+            if subFamily == "Regular" and len(fallbackStyle):
+                subFamily = fallbackStyle
 
-        # This is meant to cover the case where the SubFamily is "Italic" and the filename is *-BoldItalic.
-        if  len(subFamily) < len(fallbackStyle):
-            subFamily = fallbackStyle
+            # This is meant to cover the case where the SubFamily is "Italic" and the filename is *-BoldItalic.
+            if  len(subFamily) < len(fallbackStyle):
+                subFamily = fallbackStyle
 
-        if len(subFamily) == 0:
-            subFamily = "Regular"
+            if len(subFamily) == 0:
+                subFamily = "Regular"
 
-        familyname += " " + projectNameSingular + variant_full
+            familyname += " " + projectNameSingular + variant_full
 
-        # Don't truncate the subfamily to keep fontname unique.  MacOS treats fonts with
-        # the same name as the same font, even if subFamily is different. Make sure to
-        # keep the resulting fontname (PostScript name) valid by removing spaces.
-        fontname += '-' + subFamily.replace(' ', '')
+            # Don't truncate the subfamily to keep fontname unique.  MacOS treats fonts with
+            # the same name as the same font, even if subFamily is different. Make sure to
+            # keep the resulting fontname (PostScript name) valid by removing spaces.
+            fontname += '-' + subFamily.replace(' ', '')
 
-        # rename font
-        #
-        # comply with SIL Open Font License (OFL)
-        reservedFontNameReplacements = {
-            'source'         : 'sauce',
-            'Source'         : 'Sauce',
-            'Bitstream Vera Sans Mono' : 'Bitstrom Wera',
-            'BitstreamVeraSansMono' : 'BitstromWera',
-            'bitstream vera sans mono' : 'bitstrom wera',
-            'bitstreamverasansmono' : 'bitstromwera',
-            'hermit'         : 'hurmit',
-            'Hermit'         : 'Hurmit',
-            'hasklig'        : 'hasklug',
-            'Hasklig'        : 'Hasklug',
-            'Share'          : 'Shure',
-            'share'          : 'shure',
-            'IBMPlex'        : 'Blex',
-            'ibmplex'        : 'blex',
-            'IBM-Plex'       : 'Blex',
-            'IBM Plex'       : 'Blex',
-            'terminus'       : 'terminess',
-            'Terminus'       : 'Terminess',
-            'liberation'     : 'literation',
-            'Liberation'     : 'Literation',
-            'iAWriter'       : 'iMWriting',
-            'iA Writer'      : 'iM Writing',
-            'iA-Writer'      : 'iM-Writing',
-            'Anka/Coder'     : 'AnaConder',
-            'anka/coder'     : 'anaconder',
-            'Cascadia Code'  : 'Caskaydia Cove',
-            'cascadia code'  : 'caskaydia cove',
-            'CascadiaCode'   : 'CaskaydiaCove',
-            'cascadiacode'   : 'caskaydiacove',
-            'Cascadia Mono'  : 'Caskaydia Mono',
-            'cascadia mono'  : 'caskaydia mono',
-            'CascadiaMono'   : 'CaskaydiaMono',
-            'cascadiamono'   : 'caskaydiamono',
-            'Fira Mono'      : 'Fura Mono',
-            'Fira Sans'      : 'Fura Sans',
-            'FiraMono'       : 'FuraMono',
-            'FiraSans'       : 'FuraSans',
-            'fira mono'      : 'fura mono',
-            'fira sans'      : 'fura sans',
-            'firamono'       : 'furamono',
-            'firasans'       : 'furasans',
-            'IntelOneMono'   : 'IntoneMono',
-            'IntelOne Mono'  : 'Intone Mono',
-            'Intel One Mono' : 'Intone Mono',
-        }
+            # rename font
+            #
+            # comply with SIL Open Font License (OFL)
+            reservedFontNameReplacements = {
+                'source'         : 'sauce',
+                'Source'         : 'Sauce',
+                'Bitstream Vera Sans Mono' : 'Bitstrom Wera',
+                'BitstreamVeraSansMono' : 'BitstromWera',
+                'bitstream vera sans mono' : 'bitstrom wera',
+                'bitstreamverasansmono' : 'bitstromwera',
+                'hermit'         : 'hurmit',
+                'Hermit'         : 'Hurmit',
+                'hasklig'        : 'hasklug',
+                'Hasklig'        : 'Hasklug',
+                'Share'          : 'Shure',
+                'share'          : 'shure',
+                'IBMPlex'        : 'Blex',
+                'ibmplex'        : 'blex',
+                'IBM-Plex'       : 'Blex',
+                'IBM Plex'       : 'Blex',
+                'terminus'       : 'terminess',
+                'Terminus'       : 'Terminess',
+                'liberation'     : 'literation',
+                'Liberation'     : 'Literation',
+                'iAWriter'       : 'iMWriting',
+                'iA Writer'      : 'iM Writing',
+                'iA-Writer'      : 'iM-Writing',
+                'Anka/Coder'     : 'AnaConder',
+                'anka/coder'     : 'anaconder',
+                'Cascadia Code'  : 'Caskaydia Cove',
+                'cascadia code'  : 'caskaydia cove',
+                'CascadiaCode'   : 'CaskaydiaCove',
+                'cascadiacode'   : 'caskaydiacove',
+                'Cascadia Mono'  : 'Caskaydia Mono',
+                'cascadia mono'  : 'caskaydia mono',
+                'CascadiaMono'   : 'CaskaydiaMono',
+                'cascadiamono'   : 'caskaydiamono',
+                'Fira Mono'      : 'Fura Mono',
+                'Fira Sans'      : 'Fura Sans',
+                'FiraMono'       : 'FuraMono',
+                'FiraSans'       : 'FuraSans',
+                'fira mono'      : 'fura mono',
+                'fira sans'      : 'fura sans',
+                'firamono'       : 'furamono',
+                'firasans'       : 'furasans',
+                'IntelOneMono'   : 'IntoneMono',
+                'IntelOne Mono'  : 'Intone Mono',
+                'Intel One Mono' : 'Intone Mono',
+            }
 
-        # remove overly verbose font names
-        # particularly regarding Powerline sourced Fonts (https://github.com/powerline/fonts)
-        additionalFontNameReplacements = {
-            'for Powerline': '',
-            'ForPowerline': ''
-        }
+            # remove overly verbose font names
+            # particularly regarding Powerline sourced Fonts (https://github.com/powerline/fonts)
+            additionalFontNameReplacements = {
+                'for Powerline': '',
+                'ForPowerline': ''
+            }
 
-        additionalFontNameReplacements2 = {
-            'Powerline': ''
-        }
+            additionalFontNameReplacements2 = {
+                'Powerline': ''
+            }
 
+            familyname = replace_font_name(familyname, reservedFontNameReplacements)
+            fullname   = replace_font_name(fullname,   reservedFontNameReplacements)
+            fontname   = replace_font_name(fontname,   reservedFontNameReplacements)
+            familyname = replace_font_name(familyname, additionalFontNameReplacements)
+            fullname   = replace_font_name(fullname,   additionalFontNameReplacements)
+            fontname   = replace_font_name(fontname,   additionalFontNameReplacements)
+            familyname = replace_font_name(familyname, additionalFontNameReplacements2)
+            fullname   = replace_font_name(fullname,   additionalFontNameReplacements2)
+            fontname   = replace_font_name(fontname,   additionalFontNameReplacements2)
+
+            if self.args.makegroups < 0:
+                logger.warning("Renaming disabled! Make sure to comply with font license, esp RFN clause!")
+            elif not (FontnameParserOK and self.args.makegroups > 0):
+                # replace any extra whitespace characters:
+                font.familyname = " ".join(familyname.split())
+                font.fullname   = " ".join(fullname.split())
+                font.fontname   = " ".join(fontname.split())
+
+                font.appendSFNTName(str('English (US)'), str('Preferred Family'), font.familyname)
+                font.appendSFNTName(str('English (US)'), str('Family'), font.familyname)
+                font.appendSFNTName(str('English (US)'), str('Compatible Full'), font.fullname)
+                font.appendSFNTName(str('English (US)'), str('SubFamily'), subFamily)
+            else:
+                # Add Nerd Font suffix unless user specifically asked for some excplicit name via --name
+                if not user_supplied_name:
+                    short_family = projectNameAbbreviation + variant_abbrev if self.args.makegroups >= 4 else projectNameSingular + variant_full
+                    # inject_suffix(family, ps_fontname, short_family)
+                    n.inject_suffix(verboseAdditionalFontNameSuffix, ps_suffix, short_family)
+                n.rename_font(font)
+
+        # Project info (common to both naming approaches)
         projectInfo = (
             "Patched with '" + projectName + " Patcher' (https://github.com/ryanoasis/nerd-fonts)\n\n"
             "* Website: https://www.nerdfonts.com\n"
@@ -732,36 +810,6 @@ class font_patcher:
             "* Development Website: https://github.com/ryanoasis/nerd-fonts\n"
             "* Changelog: https://github.com/ryanoasis/nerd-fonts/blob/-/changelog.md"
         )
-
-        familyname = replace_font_name(familyname, reservedFontNameReplacements)
-        fullname   = replace_font_name(fullname,   reservedFontNameReplacements)
-        fontname   = replace_font_name(fontname,   reservedFontNameReplacements)
-        familyname = replace_font_name(familyname, additionalFontNameReplacements)
-        fullname   = replace_font_name(fullname,   additionalFontNameReplacements)
-        fontname   = replace_font_name(fontname,   additionalFontNameReplacements)
-        familyname = replace_font_name(familyname, additionalFontNameReplacements2)
-        fullname   = replace_font_name(fullname,   additionalFontNameReplacements2)
-        fontname   = replace_font_name(fontname,   additionalFontNameReplacements2)
-
-        if self.args.makegroups < 0:
-            logger.warning("Renaming disabled! Make sure to comply with font license, esp RFN clause!")
-        elif not (FontnameParserOK and self.args.makegroups > 0):
-            # replace any extra whitespace characters:
-            font.familyname = " ".join(familyname.split())
-            font.fullname   = " ".join(fullname.split())
-            font.fontname   = " ".join(fontname.split())
-
-            font.appendSFNTName(str('English (US)'), str('Preferred Family'), font.familyname)
-            font.appendSFNTName(str('English (US)'), str('Family'), font.familyname)
-            font.appendSFNTName(str('English (US)'), str('Compatible Full'), font.fullname)
-            font.appendSFNTName(str('English (US)'), str('SubFamily'), subFamily)
-        else:
-            # Add Nerd Font suffix unless user specifically asked for some excplicit name via --name
-            if not user_supplied_name:
-                short_family = projectNameAbbreviation + variant_abbrev if self.args.makegroups >= 4 else projectNameSingular + variant_full
-                # inject_suffix(family, ps_fontname, short_family)
-                n.inject_suffix(verboseAdditionalFontNameSuffix, ps_suffix, short_family)
-            n.rename_font(font)
 
         font.comment = projectInfo
         font.fontlog = projectInfo
@@ -2038,6 +2086,7 @@ def setup_arguments():
     parser.add_argument('--mono', '-s',                              dest='forcemono',        default=False, action='count',      help='Create monospaced font, existing and added glyphs are single-width (implies --single-width-glyphs)')
     parser.add_argument('--outputdir', '-out',                       dest='outputdir',        default=".",   type=str,            help='The directory to output the patched font file to')
     parser.add_argument('--quiet', '-q',                             dest='quiet',            default=False, action='store_true', help='Do not generate verbose output')
+    parser.add_argument('--simple',                                  dest='simple',           default=False, action='store_true', help='Use simple naming (just append "nerd" to family name)')
     parser.add_argument('--single-width-glyphs',                     dest='single',           default=False, action='store_true', help='Whether to generate the glyphs as single-width not double-width (default is double-width) (Nerd Font Mono)')
     parser.add_argument('--use-single-width-glyphs',                 dest='forcemono',        default=False, action='count',      help=argparse.SUPPRESS)
     parser.add_argument('--variable-width-glyphs',                   dest='nonmono',          default=False, action='store_true', help='Do not adjust advance width (no "overhang") (Nerd Font Propo)')
