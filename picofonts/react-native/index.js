@@ -1,36 +1,30 @@
 import { Platform } from 'react-native';
 
-// Font family names
 export const fonts = {
   picosans: 'picosans',
   picotype: 'picotype',
   picotypepro: 'picotypepro'
 };
 
-// Font weights
 export const weights = {
   regular: 'Regular',
-  bold: 'Bold'
+  bold: 'Bold',
+  black: 'Black'
 };
 
-// Helper to get the full font name
 export const getFontName = (family, weight = 'regular') => {
   return `${family}-${weights[weight]}`;
 };
 
-// Platform specific font loading
 export const loadFonts = async () => {
   if (Platform.OS === 'web') {
-    // For web, we use CSS imports
     return Promise.resolve();
   }
 
-  // For native platforms, we need to load the fonts
   try {
     const fontModule = await import('expo-font');
     const { Font } = fontModule;
 
-    // Load all font variants
     const fontPromises = Object.values(fonts).map(family => {
       const fontStyles = {
         regular: `${family}-regular.ttf`,
@@ -40,7 +34,6 @@ export const loadFonts = async () => {
         black: `${family}-black.ttf`
       };
 
-      // Filter out styles that don't exist
       const availableStyles = Object.entries(fontStyles).reduce((acc, [style, filename]) => {
         try {
           require(`../fonts/${family}/${filename}`);

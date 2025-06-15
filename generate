@@ -3,10 +3,8 @@
 # Get the directory where this script is located
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# Change to the script directory
 cd "$SCRIPT_DIR"
 
-# Funtion to check if a command was successful
 safely_generate() {
     ./generate-nerd-fonts $1
     if [ $? -ne 0 ]; then
