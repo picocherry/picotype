@@ -1,4 +1,4 @@
-# PicoType
+# PicoFonts
 
 A collection of monospace pixel fonts including picosans, picotype, and picotypepro. These fonts are part of the [PicoType](https://github.com/picocherry/picotype) project.
 
@@ -16,7 +16,7 @@ A 10×5 pixel font with a minimal legible width and height to ensure consistent 
 ## Installation
 
 ```bash
-npm install picotype
+npm install picofonts
 ```
 
 ## Usage
@@ -29,18 +29,18 @@ Import the CSS file for the font family you want to use:
 
 ```css
 /* Import all fonts */
-@import 'picotype/css/all.css';
+@import 'picofonts/css/all.css';
 
 /* Or import specific font family */
-@import 'picotype/css/picosans.css';
-@import 'picotype/css/picotype.css';
-@import 'picotype/css/picotypepro.css';
+@import 'picofonts/css/picosans.css';
+@import 'picofonts/css/picotype.css';
+@import 'picofonts/css/picotypepro.css';
 ```
 
 #### React Usage
 
 ```jsx
-import 'picotype/css/picosans.css';
+import 'picofonts/css/picosans.css';
 
 function App() {
   return (
@@ -63,7 +63,7 @@ Then in your React Native app:
 ```jsx
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { loadFonts, fonts, getFontName } from 'picotype/react-native';
+import { loadFonts, fonts, getFontName } from 'picofonts/react-native';
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);

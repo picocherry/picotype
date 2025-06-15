@@ -19,9 +19,9 @@ print_error() {
     echo -e "${RED}✗${NC} $1"
 }
 
-# Check if picotype directory exists
-if [ ! -d "picotype" ]; then
-    print_error "picotype directory not found"
+# Check if picofonts directory exists
+if [ ! -d "picofonts" ]; then
+    print_error "picofonts directory not found"
     exit 1
 fi
 
@@ -34,8 +34,8 @@ fi
 print_info "Copying fonts to npm package..."
 
 # Create necessary directories
-mkdir -p picotype/fonts
-mkdir -p picotype/css
+mkdir -p picofonts/fonts
+mkdir -p picofonts/css
 
 # Copy font files from build directory (excluding nerd fonts)
 for family_dir in build/*/; do
@@ -44,18 +44,18 @@ for family_dir in build/*/; do
     if [[ "$family" != *"nerd"* ]]; then
         echo "  • Copying $family..."
         # Create family directory
-        mkdir -p "picotype/fonts/$family"
+        mkdir -p "picofonts/fonts/$family"
         # Copy only .ttf and .otf files
-        find "$family_dir" -type f \( -name "*.ttf" -o -name "*.otf" \) -exec cp {} "picotype/fonts/$family/" \;
+        find "$family_dir" -type f \( -name "*.ttf" -o -name "*.otf" \) -exec cp {} "picofonts/fonts/$family/" \;
     fi
 done
 
 # Create CSS files for each font family
-for family_dir in picotype/fonts/*/; do
+for family_dir in picofonts/fonts/*/; do
     family=$(basename "$family_dir")
     echo "  • Creating CSS for $family..."
     
-    cat > "picotype/css/${family}.css" << EOF
+    cat > "picofonts/css/${family}.css" << EOF
 @font-face {
   font-family: '${family}';
   src: url('../fonts/${family}/${family}-Regular.ttf') format('truetype');
@@ -75,8 +75,8 @@ EOF
 done
 
 # Create all.css that imports all font families
-cat > "picotype/css/all.css" << EOF
-$(for family_dir in picotype/fonts/*/; do
+cat > "picofonts/css/all.css" << EOF
+$(for family_dir in picofonts/fonts/*/; do
   family=$(basename "$family_dir")
   echo "@import './${family}.css';"
 done)
@@ -86,4 +86,4 @@ print_success "Fonts copied to npm package successfully"
 print_info "You can now:"
 echo "  1. Test the changes locally"
 echo "  2. Update version in package.json if needed"
-echo "  3. Run 'npm publish' in picotype directory" 
+echo "  3. Run 'npm publish' in picofonts directory" 

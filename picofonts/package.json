@@ -1,7 +1,7 @@
 {
-  "name": "picotype",
+  "name": "picofonts",
   "version": "1.0.0",
-  "description": "PicoType - A collection of monospace pixel fonts",
+  "description": "A collection of monospace pixel fonts",
   "main": "index.js",
   "files": [
     "fonts/*",
@@ -16,15 +16,13 @@
     "font",
     "fonts",
     "monospace",
-    "picotype",
     "picosans",
-    "picotypepro",
-    "react-native"
+    "picotypepro"
   ],
-  "author": "PicoType",
+  "author": "pico cherry",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/picocherry/picotype.git"
+    "url": "git+https://github.com/picocherry/picofonts.git"
   }
 } 
