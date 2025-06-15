@@ -6,6 +6,7 @@
   "files": [
     "fonts/*",
     "css/*",
+    "react-native/*",
     "index.js"
   ],
   "scripts": {
@@ -17,7 +18,8 @@
     "monospace",
     "picotype",
     "picosans",
-    "picotypepro"
+    "picotypepro",
+    "react-native"
   ],
   "author": "PicoType",
   "license": "MIT",

@@ -21,7 +21,9 @@ npm install picotype
 
 ## Usage
 
-### CSS Import
+### Web Usage
+
+#### CSS Import
 
 Import the CSS file for the font family you want to use:
 
@@ -35,7 +37,7 @@ Import the CSS file for the font family you want to use:
 @import 'picotype/css/picotypepro.css';
 ```
 
-### React Usage
+#### React Usage
 
 ```jsx
 import 'picotype/css/picosans.css';
@@ -47,6 +49,60 @@ function App() {
     </div>
   );
 }
+```
+
+### React Native Usage
+
+First, install the required dependency:
+```bash
+npm install expo-font
+```
+
+Then in your React Native app:
+
+```jsx
+import React, { useEffect, useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { loadFonts, fonts, getFontName } from 'picotype/react-native';
+
+export default function App() {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await loadFonts();
+        setFontsLoaded(true);
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    prepare();
+  }, []);
+
+  if (!fontsLoaded) {
+    return null; // or a loading screen
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>Hello World!</Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    fontFamily: getFontName(fonts.picosans, 'regular'),
+    fontSize: 20,
+  },
+});
 ```
 
 ### Available Font Families
