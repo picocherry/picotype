@@ -1,0 +1,23 @@
+@font-face {
+  font-family: 'picotypepro';
+  src: url('./fonts/picotypepro/picotypepro-regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'picotypepro';
+  src: url('./fonts/picotypepro/picotypepro-bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'picotypepro';
+  src: url('./fonts/picotypepro/picotypepro-black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}

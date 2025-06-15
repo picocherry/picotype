@@ -1,17 +1,21 @@
 # PicoFonts
 
-A collection of monospace pixel fonts including picosans, picotype, and picotypepro. These fonts are part of the [PicoType](https://github.com/picocherry/picotype) project.
+A collection of monospace pixel fonts including picotype, picotypepro, and picosans. These fonts are part of the [picotype](https://github.com/picocherry/picotype) project.
 
 ## Font Families
 
-### picosans
-A 16×8 monospace sans serif pixel font with an italic version and manual kerning.
 
 ### picotype
 An 8×5 pixel font with minimal legible width and height to not have ambiguities. Very pico.
 
+
 ### picotypepro
 A 10×5 pixel font with a minimal legible width and height to ensure consistent baseline for better legibility.
+
+
+### picosans
+A 16×8 monospace sans serif pixel font with an italic version and manual kerning.
+
 
 ## Installation
 
@@ -29,18 +33,18 @@ Import the CSS file for the font family you want to use:
 
 ```css
 /* Import all fonts */
-@import 'picofonts/css/all.css';
+@import 'picofonts/all.css';
 
 /* Or import specific font family */
-@import 'picofonts/css/picosans.css';
-@import 'picofonts/css/picotype.css';
-@import 'picofonts/css/picotypepro.css';
+@import 'picofonts/picosans.css';
+@import 'picofonts/picotype.css';
+@import 'picofonts/picotypepro.css';
 ```
 
 #### React Usage
 
 ```jsx
-import 'picofonts/css/picosans.css';
+import 'picofonts/picosans.css';
 
 function App() {
   return (
@@ -115,7 +119,7 @@ Each font family includes Regular and Bold weights.
 
 ## Development
 
-These fonts are built and maintained in the [PicoType](https://github.com/picocherry/picotype) repository. The npm package is automatically generated from the built fonts.
+These fonts are built and maintained in the [picotype](https://github.com/picocherry/picotype) repository. The npm package is automatically generated from the built fonts.
 
 ## License
 

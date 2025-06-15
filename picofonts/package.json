@@ -1,11 +1,10 @@
 {
   "name": "picofonts",
-  "version": "1.0.0",
+  "version": "0.0.10",
   "description": "A collection of monospace pixel fonts",
   "main": "index.js",
   "files": [
     "fonts/*",
-    "css/*",
     "react-native/*",
     "index.js"
   ],

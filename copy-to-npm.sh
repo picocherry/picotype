@@ -35,7 +35,6 @@ print_info "Copying fonts to npm package..."
 
 # Create necessary directories
 mkdir -p picofonts/fonts
-mkdir -p picofonts/css
 
 # Copy font files from build directory (excluding nerd fonts)
 for family_dir in build/*/; do
@@ -55,10 +54,10 @@ for family_dir in picofonts/fonts/*/; do
     family=$(basename "$family_dir")
     echo "  • Creating CSS for $family..."
     
-    cat > "picofonts/css/${family}.css" << EOF
+    cat > "picofonts/${family}.css" << EOF
 @font-face {
   font-family: '${family}';
-  src: url('../fonts/${family}/${family}-Regular.ttf') format('truetype');
+  src: url('./fonts/${family}/${family}-regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -66,7 +65,7 @@ for family_dir in picofonts/fonts/*/; do
 
 @font-face {
   font-family: '${family}';
-  src: url('../fonts/${family}/${family}-Bold.ttf') format('truetype');
+  src: url('./fonts/${family}/${family}-bold.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -75,10 +74,10 @@ EOF
 done
 
 # Create all.css that imports all font families
-cat > "picofonts/css/all.css" << EOF
+cat > "picofonts/all.css" << EOF
 $(for family_dir in picofonts/fonts/*/; do
   family=$(basename "$family_dir")
-  echo "@import './${family}.css';"
+  echo "@import '/${family}.css';"
 done)
 EOF
 

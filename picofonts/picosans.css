@@ -1,0 +1,31 @@
+@font-face {
+  font-family: 'picosans';
+  src: url('./fonts/picosans/picosans-regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'picosans';
+  src: url('./fonts/picosans/picosans-bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'picosans';
+  src: url('./fonts/picosans/picosans-italic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'picosans';
+  src: url('./fonts/picosans/picosans-bolditalic.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
