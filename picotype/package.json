@@ -1,0 +1,28 @@
+{
+  "name": "picotype",
+  "version": "1.0.0",
+  "description": "PicoType - A collection of monospace pixel fonts",
+  "main": "index.js",
+  "files": [
+    "fonts/*",
+    "css/*",
+    "index.js"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "font",
+    "fonts",
+    "monospace",
+    "picotype",
+    "picosans",
+    "picotypepro"
+  ],
+  "author": "PicoType",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/picocherry/picotype.git"
+  }
+} 
