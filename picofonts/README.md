@@ -4,18 +4,14 @@ A collection of monospace pixel fonts including picotype, picotypepro, and picos
 
 ## Font Families
 
-
 ### picotype
 An 8×5 pixel font with minimal legible width and height to not have ambiguities. Very pico.
-
 
 ### picotypepro
 A 10×5 pixel font with a minimal legible width and height to ensure consistent baseline for better legibility.
 
-
 ### picosans
 A 16×8 monospace sans serif pixel font with an italic version and manual kerning.
-
 
 ## Installation
 
@@ -27,39 +23,39 @@ npm install picofonts
 
 ### Web Usage
 
-#### CSS Import
-
-Import the CSS file for the font family you want to use:
-
-```css
-/* Import all fonts */
-@import 'picofonts/all.css';
-
-/* Or import specific font family */
-@import 'picofonts/picosans.css';
-@import 'picofonts/picotype.css';
-@import 'picofonts/picotypepro.css';
+#### Import All Fonts
+```javascript
+import 'picofonts';
 ```
 
-#### React Usage
+#### Import Specific Font
+```javascript
+import 'picofonts/picosans';  // Just PicoSans
+import 'picofonts/picotype';  // Just PicoType
+import 'picofonts/picotypepro';  // Just PicoTypePro
+```
 
-```jsx
-import 'picofonts/picosans.css';
+#### CSS Usage
+```css
+/* The fonts will be available with these font-family names */
+.picosans {
+  font-family: 'picosans';
+}
 
-function App() {
-  return (
-    <div style={{ fontFamily: 'picosans' }}>
-      Hello World!
-    </div>
-  );
+.picotype {
+  font-family: 'picotype';
+}
+
+.picotypepro {
+  font-family: 'picotypepro';
 }
 ```
 
 ### React Native Usage
 
-First, install the required dependency:
+First, install the required dependencies:
 ```bash
-npm install expo-font
+npm install react-native expo-font
 ```
 
 Then in your React Native app:
@@ -67,7 +63,7 @@ Then in your React Native app:
 ```jsx
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { loadFonts, fonts, getFontName } from 'picofonts/react-native';
+import { loadFonts, fonts, weights, styles, getFontName } from 'picofonts/react-native';
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -103,19 +99,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    fontFamily: getFontName(fonts.picosans, 'regular'),
+    fontFamily: getFontName(fonts.picosans, weights.regular),
     fontSize: 20,
   },
 });
 ```
 
-### Available Font Families
+### Available Font Weights and Styles
 
-- picosans (16×8 monospace sans serif)
-- picotype (8×5 pixel font)
-- picotypepro (10×5 pixel font)
-
-Each font family includes Regular and Bold weights.
+Each font family supports:
+- Regular
+- Bold
+- Black (except picosans)
+- Italic (picosans only)
+- Bold Italic (picosans only)
 
 ## Development
 
