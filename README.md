@@ -23,7 +23,33 @@ All typefaces have a nerd font patched version. Patched with the complete icon s
 
 ## Installation
 
-### Manual Installation
+### NPM Package
+```bash
+npm install picofonts
+```
+
+Then in your code:
+```javascript
+// Import all fonts
+import 'picofonts';
+
+// Or import specific font
+import 'picofonts/picosans';
+import 'picofonts/picotype';
+import 'picofonts/picotypepro';
+```
+
+For React Native support:
+```bash
+npm install picofonts react-native expo-font
+```
+
+Then import from the react-native subpath:
+```javascript
+import { loadFonts, fonts, weights, styles, getFontName } from 'picofonts/react-native';
+```
+
+### OS Installation
 1. Download the font files from the latest [release](https://github.com/picocherry/picotype/releases), or from the [`/build`](https://github.com/picocherry/picotype/tree/main/build) directory
 2. Install the fonts on your system:
    - **macOS**: Double-click the font files or use Font Book

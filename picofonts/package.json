@@ -1,6 +1,6 @@
 {
   "name": "picofonts",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "A collection of monospace pixel fonts",
   "main": "index.js",
   "style": "all.css",
@@ -27,12 +27,12 @@
     },
     "./react-native": {
       "import": "./react-native/index.js",
-      "require": "./react-native/index.js"
+      "require": "./react-native/index.js",
+      "peerDependencies": {
+        "react-native": ">=0.60.0",
+        "expo-font": ">=8.0.0"
+      }
     }
-  },
-  "peerDependencies": {
-    "react-native": ">=0.60.0",
-    "expo-font": ">=8.0.0"
   },
   "files": [
     "fonts/**/*.otf",
@@ -55,6 +55,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/picocherry/picofonts.git"
+    "url": "git+https://github.com/picocherry/picotype.git"
   }
 } 
