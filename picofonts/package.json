@@ -1,12 +1,15 @@
 {
   "name": "picofonts",
-  "version": "0.0.10",
+  "version": "0.0.14",
   "description": "A collection of monospace pixel fonts",
   "main": "index.js",
+  "style": "all.css",
   "files": [
-    "fonts/*",
+    "fonts/**/*.otf",
+    "fonts/**/*.ttf",
     "react-native/*",
-    "index.js"
+    "index.js",
+    "*.css"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

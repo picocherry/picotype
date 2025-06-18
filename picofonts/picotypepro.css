@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'picotypepro';
-  src: url('./fonts/picotypepro/picotypepro-regular.ttf') format('truetype');
+  src: url('./fonts/picotypepro/picotypepro-regular.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: 'picotypepro';
-  src: url('./fonts/picotypepro/picotypepro-bold.ttf') format('truetype');
+  src: url('./fonts/picotypepro/picotypepro-bold.otf') format('opentype');
   font-weight: bold;
   font-style: normal;
   font-display: swap;
@@ -16,7 +16,7 @@
 
 @font-face {
   font-family: 'picotypepro';
-  src: url('./fonts/picotypepro/picotypepro-black.ttf') format('truetype');
+  src: url('./fonts/picotypepro/picotypepro-black.otf') format('opentype');
   font-weight: 900;
   font-style: normal;
   font-display: swap;

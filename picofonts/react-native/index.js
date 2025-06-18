@@ -7,13 +7,17 @@ export const fonts = {
 };
 
 export const weights = {
-  regular: 'Regular',
-  bold: 'Bold',
-  black: 'Black'
+  regular: 'regular',
+  bold: 'bold',
+  black: 'black'
 };
 
-export const getFontName = (family, weight = 'regular') => {
-  return `${family}-${weights[weight]}`;
+export const styles = {
+  italic: 'italic'
+};
+
+export const getFontName = (family, weight = 'regular', style) => {
+  return `${family}-${weights[weight]}${styles[style] ? `-${styles[style]}` : ''}`;
 };
 
 export const loadFonts = async () => {
@@ -26,19 +30,23 @@ export const loadFonts = async () => {
     const { Font } = fontModule;
 
     const fontPromises = Object.values(fonts).map(family => {
-      const fontStyles = {
-        regular: `${family}-regular.ttf`,
-        bold: `${family}-bold.ttf`,
-        italic: `${family}-italic.ttf`,
-        bolditalic: `${family}-bolditalic.ttf`,
-        black: `${family}-black.ttf`
-      };
+      const fontStyles = {};
+      
+      // Add all weight combinations
+      Object.keys(weights).forEach(weight => {
+        const fontName = getFontName(family, weight);
+        const italicFontName = getFontName(family, weight, 'italic');
+        fontStyles[weight] = [`${fontName}.ttf`, `${fontName}.otf`, `${italicFontName}.ttf`, `${italicFontName}.otf`];
+      });
 
-      const availableStyles = Object.entries(fontStyles).reduce((acc, [style, filename]) => {
-        try {
-          require(`../fonts/${family}/${filename}`);
-          acc[getFontName(family, style)] = require(`../fonts/${family}/${filename}`);
-        } catch (e) {
+      const availableStyles = Object.entries(fontStyles).reduce((acc, [style, filenames]) => {
+        for (const filename of filenames) {
+          try {
+            require(`../fonts/${family}/${filename}`);
+            acc[getFontName(family, style)] = require(`../fonts/${family}/${filename}`);
+            break;
+          } catch (e) {
+          }
         }
         return acc;
       }, {});
