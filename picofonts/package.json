@@ -1,0 +1,60 @@
+{
+  "name": "picofonts",
+  "version": "0.0.18",
+  "description": "A collection of monospace pixel fonts",
+  "main": "index.js",
+  "style": "all.css",
+  "exports": {
+    ".": {
+      "import": "./index.js",
+      "require": "./index.js",
+      "style": "./all.css"
+    },
+    "./picosans": {
+      "import": "./index.js",
+      "require": "./index.js",
+      "style": "./picosans.css"
+    },
+    "./picotype": {
+      "import": "./index.js",
+      "require": "./index.js",
+      "style": "./picotype.css"
+    },
+    "./picotypepro": {
+      "import": "./index.js",
+      "require": "./index.js",
+      "style": "./picotypepro.css"
+    },
+    "./react-native": {
+      "import": "./react-native/index.js",
+      "require": "./react-native/index.js",
+      "peerDependencies": {
+        "react-native": ">=0.60.0",
+        "expo-font": ">=8.0.0"
+      }
+    }
+  },
+  "files": [
+    "fonts/**/*.otf",
+    "fonts/**/*.ttf",
+    "react-native/*",
+    "index.js",
+    "*.css"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "font",
+    "fonts",
+    "monospace",
+    "picosans",
+    "picotypepro"
+  ],
+  "author": "pico cherry",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/picocherry/picotype.git"
+  }
+} 
