@@ -1,6 +1,6 @@
 {
   "name": "picofonts",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "A collection of monospace pixel fonts",
   "main": "index.js",
   "style": "all.css",
