@@ -37,7 +37,7 @@
 	"font-author": "pico cherry",
 	"font-copy": "(c) 2025 pico cherry",
 	"font-version-major": 0,
-	"font-version-minor": 8,
+	"font-version-minor": 9,
 	"font-desc": "pixel font in a 8x5 grid",
 	"font-license": "(c) 2025 pico cherry",
 	"font-license-url": "",
@@ -49,8 +49,8 @@
 	"font-width-class": "5",
 	"font-creation-date": "2025-05-09",
 	"font-creation-time": "17:53",
-	"font-modification-date": "2025-06-09",
-	"font-modification-time": "10:15",
+	"font-modification-date": "2025-06-28",
+	"font-modification-time": "11:54",
 	"font-modification-auto": true,
 	"overrides": [
 		"# hide the pixels of the \"space\" characters!",
@@ -68,6 +68,7 @@
 		"ůýÿŷžźżÁÂÀÄÅÃǍĀÆÇĆČĊÉÊÈËẼĒ",
 		"ĖĘÍÎÌÏǏĨĮÑŃŅŇÓÔÒÖÕØŌŒŠŞŚÚÛ",
 		"ÙÜǓŨŪŰŮÝŸŶŽŹŻđĐ≠±≈∓∆∏∑∫Ππ¤",
-		"→↑←↓‰ẞ∐∇√∞≂≃≤≥≡≢≣≪≫↔↕‛‟‼‽"
+		"→↑←↓‰ẞ∐∇√∞≂≃≤≥≡≢≣≪≫↔↕‛‟‼‽",
+		""
 	]
 }
