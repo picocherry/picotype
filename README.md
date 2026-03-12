@@ -2,20 +2,29 @@
 
 # `pico` fonts
 
-## `picotype` typeface   
-  A 8×5 pixel font with minimal legible width and height to not have ambiguities. Very pico.
+## `picomono` typeface
 
-<img src="./assets/picotype.png" width=450 />  
+A 13x7 pixel font. Legible and usable for development.
 
-## `picotypepro` typeface   
-  A 10×5 pixel font with a minimal legible width and height to to ensure consistent baseline for better legibility.
+<img src="./assets/picomono.png" width=450>
 
-<img src="./assets/picotypepro.png" width=450 />  
+## `picotype` typeface
+
+A 8×5 pixel font with minimal width and height to not have ambiguities. Very pico.
+
+<img src="./assets/picotype.png" width=450 />
+
+## `picotypepro` typeface
+
+A 10×5 pixel font with a minimal legible width and height to to ensure consistent baseline for better legibility.
+
+<img src="./assets/picotypepro.png" width=450 />
 
 ## `picosans` typeface
-  A 16×8 monospace sans serif pixel font with an italic version and manual kerning.
 
-  <img src="./assets/picosans.png" width=450 />  
+A 16×8 monospace sans serif pixel font with an italic version.
+
+  <img src="./assets/picosans.png" width=450 />
 
 ## Nerdfonts
 
@@ -24,32 +33,43 @@ All typefaces have a nerd font patched version. Patched with the complete icon s
 ## Installation
 
 ### NPM Package
+
 ```bash
 npm install picofonts
 ```
 
 Then in your code:
+
 ```javascript
 // Import all fonts
-import 'picofonts';
+import "picofonts";
 
 // Or import specific font
-import 'picofonts/picosans';
-import 'picofonts/picotype';
-import 'picofonts/picotypepro';
+import "picofonts/picosans";
+import "picofonts/picotype";
+import "picofonts/picotypepro";
 ```
 
 For React Native support:
+
 ```bash
 npm install picofonts react-native expo-font
 ```
 
 Then import from the react-native subpath:
+
 ```javascript
-import { loadFonts, fonts, weights, styles, getFontName } from 'picofonts/react-native';
+import {
+  loadFonts,
+  fonts,
+  weights,
+  styles,
+  getFontName,
+} from "picofonts/react-native";
 ```
 
 ### OS Installation
+
 1. Download the font files from the latest [release](https://github.com/picocherry/picotype/releases), or from the [`/build`](https://github.com/picocherry/picotype/tree/main/build) directory
 2. Install the fonts on your system:
    - **macOS**: Double-click the font files or use Font Book
@@ -62,6 +82,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 If you want to add a new font, you should add it to the ./src folder.
 The ./src folder structure is the following:
+
 ```
 📁 familyname/
 ├── 📁 regular/
@@ -74,9 +95,9 @@ The ./src folder structure is the following:
     └── familyname-bolditalic.ttf
 ```
 
-then run 
+then run
 
-```./build.sh```
+`./build.sh`
 
 script that will add metadata so that the OS knows all the different files are of the same font family.
 build.sh will allow you to choose which font families you want to build, and the options you want to build them with. You will also be able to choose to patch with nerd fonts.
@@ -87,19 +108,23 @@ build.sh will allow you to choose which font families you want to build, and the
 2. Open the font in FontForge
 3. Element → Font Info...
 4. General tab:
-  - Fontname: unique font name including the font family and the variant. E.g. Helvetica Regular
-  - Font Family: only the font family that needs to be the same on all fonts. E.g. Helvetica
-  - Name for Humans: just use same as font family
-5. TTF Names tab: 
-  - \<New\> → English (US) → Preferred Family → e.g. Helvetica
-  - \<New\> → English (US) → Preferred Styles → e.g. Regular
-  - if you changed the Fontname, update the UniqueID as well
-6. File → Generate Fonts...
-  - check validate before saving
-  - use TrueType
-  - No BitMap Fonts
-  - Generate
 
+- Fontname: unique font name including the font family and the variant. E.g. Helvetica Regular
+- Font Family: only the font family that needs to be the same on all fonts. E.g. Helvetica
+- Name for Humans: just use same as font family
+
+5. TTF Names tab:
+
+- \<New\> → English (US) → Preferred Family → e.g. Helvetica
+- \<New\> → English (US) → Preferred Styles → e.g. Regular
+- if you changed the Fontname, update the UniqueID as well
+
+6. File → Generate Fonts...
+
+- check validate before saving
+- use TrueType
+- No BitMap Fonts
+- Generate
 
 ## Patching to nerd fonts
 
