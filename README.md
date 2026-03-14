@@ -4,13 +4,13 @@
 
 ## `picomono` typeface
 
-A 13x7 pixel font. Legible and usable for development.
+13x7 pixel font. Minimal font that is still very usable for writing code.
 
 <img src="./assets/picomono.png" width=450>
 
 ## `picotype` typeface
 
-A 8×5 pixel font with minimal width and height to not have ambiguities. Very pico.
+8×5 pixel font with minimal width and height to not have ambiguities.
 
 <img src="./assets/picotype.png" width=450 />
 
@@ -24,7 +24,7 @@ A 10×5 pixel font with a minimal legible width and height to to ensure consiste
 
 A 16×8 monospace sans serif pixel font with an italic version.
 
-  <img src="./assets/picosans.png" width=450 />
+<img src="./assets/picosans.png" width=450 />
 
 ## Nerdfonts
 
