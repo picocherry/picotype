@@ -30,7 +30,8 @@
 		"╅ℹ┭┵┽┲┺╊╃╮╭╯╰╳╲╱╌╎╷┬┐┌─╴╼┈┊╶┄",
 		"┆╵╽┴┘└│┼┤├╆┮┶┾┱┹╉╄╨╜╙╀┸┦┚┞┖╈┷",
 		"┪┙┢┕╧╛╘╫╢╟╂┨┠┿┥┝╡╞🮂🮃🮄🮅🮆🮇🮈⸱🮉🮊🮋",
-		"❰❮❱❯❬❭"
+		"❰❮❱❯❬❭▸⎿⣿⠀⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏◯◉✢✳◔◑◕◖◗",
+		"◐◒◓⎾⏌⏋⌈⌉⌊⌋⌜⌝⌞⌟⌒✻"
 	],
 	"glyph-color": "black",
 	"glyph-width": 7,
@@ -68,8 +69,8 @@
 	"font-width-class": "5",
 	"font-creation-date": "2026-03-08",
 	"font-creation-time": "07:45",
-	"font-modification-date": "2026-03-10",
-	"font-modification-time": "22:33",
+	"font-modification-date": "2026-03-16",
+	"font-modification-time": "10:43",
 	"font-modification-auto": true,
 	"overrides": [
 		"# hide the pixels of the \"space\" characters!",
@@ -106,7 +107,8 @@
 		"╅ℹ┭┵┽┲┺╊╃╮╭╯╰╳╲╱╌╎╷┬┐┌─╴╼┈┊╶┄",
 		"┆╵╽┴┘└│┼┤├╆┮┶┾┱┹╉╄╨╜╙╀┸┦┚┞┖╈┷",
 		"┪┙┢┕╧╛╘╫╢╟╂┨┠┿┥┝╡╞🮂🮃🮄🮅🮆🮇🮈⸱🮉🮊🮋",
-		"❰❮❱❯❬❭",
+		"❰❮❱❯❬❭▸⎿⣿⠀⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏◯◉✢✳◔◑◕◖◗",
+		"◐◒◓⎾⏌⏋⌈⌉⌊⌋⌜⌝⌞⌟⌒✻",
 		""
 	]
 }
