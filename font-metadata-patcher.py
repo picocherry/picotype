@@ -58,6 +58,117 @@ PFM_FAMILY_MAP = {
     'decorative': 5
 }
 
+def compute_tight_metrics(font, logger):
+    """Compute tightest metrics by measuring actual glyph bounds.
+
+    Returns (body_ascent, body_descent, full_ascent, full_descent):
+    - body: caps and tall lowercase + descenders (determines em / visual size)
+    - full: including diacritics (determines line spacing via typo/hhea)
+    """
+    body_glyphs = list('ABCDEFGHIJKLMNOPQRSTUVWXYZbdfhklt')
+    descent_glyphs = list('gjpqy')
+    diacritic_glyphs = list('ÁÀÂÄÃÅĀĂĄǍČĆĈĊĎĐÉÈÊËĒĔĖĘĚĜĞĠĢĤĦÍÌÎÏĨĪĬĮİǏĴĶĹĻĽĿŁŃŅŇÑÓÒÔÖÕŌŎŐǑŔŖŘŚŜŞŠȘŢŤŦÚÙÛÜŨŪŬŮŰŲǓŴŶŸÝŹŻŽ'
+                                   'áàâäãåāăąǎčćĉċďđéèêëēĕėęěĝğġģĥħíìîïĩīĭįǐĵķĺļľŀłńņňñóòôöõōŏőǒŕŗřśŝşšșţťŧúùûüũūŭůűųǔŵŷÿýźżž')
+
+    body_ascent = 0
+    body_descent = 0
+    full_ascent = 0
+    full_descent = 0
+
+    def get_glyph_bbox(glyph_char):
+        cp = ord(glyph_char)
+        try:
+            glyph = font[cp]
+            if glyph.isWorthOutputting():
+                return glyph.boundingBox()
+        except (TypeError, ValueError):
+            pass
+        return None
+
+    # Body ascent from caps and tall lowercase
+    for ch in body_glyphs:
+        bbox = get_glyph_bbox(ch)
+        if bbox:
+            body_ascent = max(body_ascent, bbox[3])
+
+    # Descent from descender glyphs
+    for ch in descent_glyphs:
+        bbox = get_glyph_bbox(ch)
+        if bbox and bbox[1] < 0:
+            body_descent = max(body_descent, abs(bbox[1]))
+
+    # Full extent starts from body
+    full_ascent = body_ascent
+    full_descent = body_descent
+
+    # Diacritics push full extent further
+    for ch in diacritic_glyphs:
+        bbox = get_glyph_bbox(ch)
+        if bbox:
+            full_ascent = max(full_ascent, bbox[3])
+            if bbox[1] < 0:
+                full_descent = max(full_descent, abs(bbox[1]))
+
+    # Fallbacks
+    if body_ascent == 0:
+        body_ascent = font.os2_typoascent
+        logger.warning("Could not measure body ascent, using existing os2_typoascent")
+    if body_descent == 0:
+        body_descent = abs(font.os2_typodescent)
+        logger.warning("Could not measure body descent, using existing os2_typodescent")
+    if full_ascent == 0:
+        full_ascent = body_ascent
+    if full_descent == 0:
+        full_descent = body_descent
+
+    # Round up
+    body_ascent = int(body_ascent + 0.5)
+    body_descent = int(body_descent + 0.5)
+    full_ascent = int(full_ascent + 0.5)
+    full_descent = int(full_descent + 0.5)
+
+    logger.info(f"Tight metrics: body={body_ascent}+{body_descent}={body_ascent+body_descent}, "
+                f"full={full_ascent}+{full_descent}={full_ascent+full_descent}, em={font.em}")
+
+    return body_ascent, body_descent, full_ascent, full_descent
+
+
+def apply_line_metrics(font, body_ascent, body_descent, full_ascent, full_descent, logger):
+    """Apply line metrics.
+
+    - em (font.ascent/descent) set to body bounds -> controls visual glyph size
+    - typo/hhea set to full bounds -> controls line spacing
+    - win set to max extent -> prevents clipping
+    """
+    # Win metrics: clipping safety
+    win_ascent = max(font.os2_winascent, full_ascent)
+    win_descent = max(font.os2_windescent, full_descent)
+    font.os2_winascent = win_ascent
+    font.os2_windescent = win_descent
+
+    # Typo/hhea: line spacing from full glyph extent
+    font.os2_typoascent = full_ascent
+    font.os2_typodescent = -full_descent
+    font.os2_typolinegap = 0
+    font.hhea_ascent = full_ascent
+    font.hhea_descent = -full_descent
+    font.hhea_linegap = 0
+
+    # Em square: body bounds -> glyphs render bigger at same point size
+    old_em = font.ascent + font.descent
+    font.ascent = body_ascent
+    font.descent = body_descent
+    new_em = body_ascent + body_descent
+
+    font.os2_use_typo_metrics = True
+
+    logger.info(f"Em: {old_em} -> {new_em} "
+                f"(ascent {font.ascent}, descent {font.descent})")
+    logger.info(f"Line spacing: {full_ascent}+{full_descent}={full_ascent+full_descent} "
+                f"({(full_ascent+full_descent)/new_em:.3f}x em)")
+    logger.info(f"Win: {win_ascent}/{win_descent}, USE_TYPO_METRICS=on")
+
+
 def setup_logger(debug=False):
     """Set up logging configuration"""
     logger = logging.getLogger('font-metadata-patcher')
@@ -199,6 +310,24 @@ def set_font_metadata(font, family_name, style_info, args, logger):
         font.copyright = args.license  # Also set the general copyright property
         logger.debug(f"License/Copyright set: {args.license}")
     
+    # Apply line height adjustments
+    if args.tighten:
+        body_asc, body_desc, full_asc, full_desc = compute_tight_metrics(font, logger)
+        apply_line_metrics(font, body_asc, body_desc, full_asc, full_desc, logger)
+    elif args.lineheight is not None:
+        # Manual line height as fraction of em
+        total = int(font.em * args.lineheight)
+        current_total = font.os2_typoascent + abs(font.os2_typodescent)
+        if current_total > 0:
+            ratio = font.os2_typoascent / current_total
+        else:
+            ratio = 0.8
+        ascent = int(total * ratio)
+        descent = total - ascent
+        logger.info(f"Manual line height: {args.lineheight}x em = {total} "
+                    f"(ascent={ascent}, descent={descent})")
+        apply_line_metrics(font, ascent, descent, ascent, descent, logger)
+
     logger.debug(f"Font metadata set: {font_name} ({human_name})")
 
 def process_font_file(font_path, family_name, style_folder, output_dir, args, logger):
@@ -329,6 +458,14 @@ def main():
                         action='store_true',
                         help='Convert all font names to lowercase')
     
+    parser.add_argument('--tighten',
+                        action='store_true',
+                        help='Auto-tighten line height by measuring glyph bounds (incl. diacritics)')
+
+    parser.add_argument('--lineheight',
+                        type=float,
+                        help='Set line height as fraction of em (e.g., 0.875 for 7/8)')
+
     parser.add_argument('--debug',
                         action='store_true',
                         help='Enable debug logging')
