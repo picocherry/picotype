@@ -148,6 +148,14 @@ def apply_line_metrics(font, ascent, descent, logger):
     font.hhea_descent = -descent
     font.hhea_linegap = 0
 
+    # Fix baseline placement: set internal ascent/descent to match actual glyph bounds
+    # This ensures the baseline sits where the bottom of 'a' is, not shifted
+    old_ascent, old_descent = font.ascent, font.descent
+    font.ascent = ascent
+    font.descent = descent
+    if old_ascent != ascent or old_descent != descent:
+        logger.info(f"Baseline fixed: ascent {old_ascent}->{ascent}, descent {old_descent}->{descent}")
+
     # Enable USE_TYPO_METRICS — tells Windows to use typo metrics for line spacing
     font.os2_use_typo_metrics = True
 
