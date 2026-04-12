@@ -2,33 +2,35 @@
 
 # `pico` fonts
 
+A collection of pixel fonts for various purposes.
+
 ## `picomono` typeface
 
-13x7 pixel font: minimal font size that is still very usable for writing code.
+`13x7` pixel font: minimal font size that is still very usable for writing code.
 
 <img src="./assets/picomono.png" width=450>
 
 ## `picotype` typeface
 
-8×5 pixel font: minimal font size to not have ambiguities.
+`8×5` pixel font: minimal font size to not have ambiguities, and support multiple weights.
 
 <img src="./assets/picotype.png" width=450 />
 
 ## `picotypepro` typeface
 
-A 10×5 pixel font: a minimal legible font size to to ensure consistent baseline for better legibility.
+`10×5` pixel font: a minimal legible font size to to ensure consistent baseline for better legibility.
 
 <img src="./assets/picotypepro.png" width=450 />
 
 ## `picotiny` typeface
 
-A 7x3 pixel font: a minimal font size that is still legible (more or less).
+`7x3` pixel font: a minimal font size that is still legible (more or less).
 
 <img src="./assets/picotiny.png" width=450 />
 
 ## `picosans` typeface
 
-A 16×8 monospace sans serif pixel font with an italic version.
+`16×8` monospace sans serif pixel font with an italic version.
 
 <img src="./assets/picosans.png" width=450 />
 
@@ -68,7 +70,7 @@ then run
 `./build.sh`
 
 script that will add metadata so that the OS knows all the different files are of the same font family.
-build.sh will allow you to choose which font families you want to build, and the options you want to build them with. You will also be able to choose to patch with nerd fonts.
+`build.sh` will allow you to choose which font families you want to build, and the options you want to build them with. You will also be able to choose to patch with nerd fonts.
 
 ## Manual editing in FontForge
 
