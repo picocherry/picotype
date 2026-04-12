@@ -4,21 +4,27 @@
 
 ## `picomono` typeface
 
-13x7 pixel font. Minimal font that is still very usable for writing code.
+13x7 pixel font: minimal font size that is still very usable for writing code.
 
 <img src="./assets/picomono.png" width=450>
 
 ## `picotype` typeface
 
-8×5 pixel font with minimal width and height to not have ambiguities.
+8×5 pixel font: minimal font size to not have ambiguities.
 
 <img src="./assets/picotype.png" width=450 />
 
 ## `picotypepro` typeface
 
-A 10×5 pixel font with a minimal legible width and height to to ensure consistent baseline for better legibility.
+A 10×5 pixel font: a minimal legible font size to to ensure consistent baseline for better legibility.
 
 <img src="./assets/picotypepro.png" width=450 />
+
+## `picotiny` typeface
+
+A 7x3 pixel font: a minimal font size that is still legible (more or less).
+
+<img src="./assets/picotiny.png" width=450 />
 
 ## `picosans` typeface
 
@@ -29,44 +35,6 @@ A 16×8 monospace sans serif pixel font with an italic version.
 ## Nerdfonts
 
 All typefaces have a nerd font patched version. Patched with the complete icon set.
-
-## Installation
-
-### NPM Package
-
-```bash
-npm install picofonts
-```
-
-Then in your code:
-
-```javascript
-// Import all fonts
-import "picofonts";
-
-// Or import specific font
-import "picofonts/picosans";
-import "picofonts/picotype";
-import "picofonts/picotypepro";
-```
-
-For React Native support:
-
-```bash
-npm install picofonts react-native expo-font
-```
-
-Then import from the react-native subpath:
-
-```javascript
-import {
-  loadFonts,
-  fonts,
-  weights,
-  styles,
-  getFontName,
-} from "picofonts/react-native";
-```
 
 ### OS Installation
 
