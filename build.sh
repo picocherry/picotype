@@ -310,6 +310,65 @@ ask_onum_source() {
     esac
 }
 
+# Get current version of a font family from build folder
+# Usage: get_family_version "picosans"  → prints version string (e.g. "0.2")
+get_family_version() {
+    local family="$1"
+    python3 -c "
+import fontforge, sys, os
+fdir = os.path.join('$BUILD_DIR', '$family')
+if not os.path.isdir(fdir):
+    sys.exit(0)
+for fname in sorted(os.listdir(fdir)):
+    if fname.endswith(('.ttf', '.otf')):
+        f = fontforge.open(os.path.join(fdir, fname))
+        print(f.version or '')
+        f.close()
+        sys.exit(0)
+" 2>/dev/null
+}
+
+# Compute bumped version for a family based on VERSION_STRATEGY
+# Usage: compute_version "picosans"  → prints --version flag or empty string
+compute_version_flag() {
+    local family="$1"
+    local current_version
+    current_version=$(get_family_version "$family")
+
+    case "$VERSION_STRATEGY" in
+        1|2|3)
+            if [ -z "$current_version" ]; then
+                return
+            fi
+            local major minor patch
+            IFS='.' read -r major minor patch <<< "$current_version"
+            major=${major:-0}
+            minor=${minor:-0}
+            patch=${patch:-0}
+            local new_version=""
+            case "$VERSION_STRATEGY" in
+                1) new_version="$major.$minor.$((patch + 1))" ;;
+                2) new_version="$major.$((minor + 1)).0" ;;
+                3) new_version="$((major + 1)).0.0" ;;
+            esac
+            echo "--version '$new_version'"
+            print_info "$family: $current_version → $new_version" >&2
+            ;;
+        4)
+            if [ -n "$VERSION_CUSTOM" ]; then
+                echo "--version '$VERSION_CUSTOM'"
+            fi
+            ;;
+        *)
+            # keep — no flag
+            ;;
+    esac
+}
+
+# Global version strategy (set by get_metadata_options)
+VERSION_STRATEGY="5"
+VERSION_CUSTOM=""
+
 # Gather metadata patcher options (stores in global METADATA_OPTIONS)
 get_metadata_options() {
     local options=""
@@ -329,10 +388,21 @@ get_metadata_options() {
         options="$options --type serif"
     fi
 
-    printf "${YELLOW}?${NC} Version (enter to keep original): "
-    read -r version
-    if [ -n "$version" ]; then
-        options="$options --version '$version'"
+    # Version bump strategy — actual version computed per-family at build time
+    echo
+    print_header "Version"
+    echo "    1) patch bump"
+    echo "    2) minor bump"
+    echo "    3) major bump"
+    echo "    4) custom (same for all)"
+    echo "    5) keep"
+    printf "${YELLOW}?${NC} Version [1/2/3/4/5] (default: 5): "
+    read -r ver_choice
+    VERSION_STRATEGY="${ver_choice:-5}"
+    VERSION_CUSTOM=""
+    if [ "$VERSION_STRATEGY" = "4" ]; then
+        printf "${YELLOW}?${NC} Version: "
+        read -r VERSION_CUSTOM
     fi
 
     printf "${YELLOW}?${NC} Output extension (ttf/otf, enter to keep): "
@@ -482,8 +552,12 @@ main() {
         print_header "Building: $family_name"
         echo
 
+        # Compute per-family version flag
+        local version_flag=""
+        version_flag=$(compute_version_flag "$family_name")
+
         # Run metadata patcher
-        if run_metadata_patcher "$family_name" "$METADATA_OPTIONS"; then
+        if run_metadata_patcher "$family_name" "$METADATA_OPTIONS $version_flag"; then
             ((processed_count++))
 
             # Small caps
