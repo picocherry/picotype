@@ -59,108 +59,114 @@ PFM_FAMILY_MAP = {
 }
 
 def compute_tight_metrics(font, logger):
-    """Compute tightest line metrics by measuring actual glyph bounds.
+    """Compute tightest metrics by measuring actual glyph bounds.
 
-    Strategy:
-    - Measure 'body' glyphs (capitals, tall lowercase) for ascent
-    - Measure descender glyphs for descent
-    - Check diacritics to ensure they aren't clipped
-    - Return (ascent, descent) as positive values
+    Returns (body_ascent, body_descent, full_ascent, full_descent):
+    - body: caps and tall lowercase + descenders (determines em / visual size)
+    - full: including diacritics (determines line spacing via typo/hhea)
     """
-    # Reference glyphs to measure
-    ascent_glyphs = list('ABCDEFGHIJKLMNOPQRSTUVWXYZbdfhklt')
+    body_glyphs = list('ABCDEFGHIJKLMNOPQRSTUVWXYZbdfhklt')
     descent_glyphs = list('gjpqy')
-    # Diacritics that may extend above caps or below baseline
     diacritic_glyphs = list('ÁÀÂÄÃÅĀĂĄǍČĆĈĊĎĐÉÈÊËĒĔĖĘĚĜĞĠĢĤĦÍÌÎÏĨĪĬĮİǏĴĶĹĻĽĿŁŃŅŇÑÓÒÔÖÕŌŎŐǑŔŖŘŚŜŞŠȘŢŤŦÚÙÛÜŨŪŬŮŰŲǓŴŶŸÝŹŻŽ'
                                    'áàâäãåāăąǎčćĉċďđéèêëēĕėęěĝğġģĥħíìîïĩīĭįǐĵķĺļľŀłńņňñóòôöõōŏőǒŕŗřśŝşšșţťŧúùûüũūŭůűųǔŵŷÿýźżž')
 
-    max_ascent = 0
-    max_descent = 0  # stored as positive
+    body_ascent = 0
+    body_descent = 0
+    full_ascent = 0
+    full_descent = 0
 
     def get_glyph_bbox(glyph_char):
-        """Get bounding box of a glyph by unicode codepoint."""
         cp = ord(glyph_char)
         try:
             glyph = font[cp]
             if glyph.isWorthOutputting():
-                bbox = glyph.boundingBox()  # (xmin, ymin, xmax, ymax)
-                return bbox
+                return glyph.boundingBox()
         except (TypeError, ValueError):
             pass
         return None
 
-    # Measure ascent from body glyphs
-    for ch in ascent_glyphs:
+    # Body ascent from caps and tall lowercase
+    for ch in body_glyphs:
         bbox = get_glyph_bbox(ch)
         if bbox:
-            max_ascent = max(max_ascent, bbox[3])  # ymax
+            body_ascent = max(body_ascent, bbox[3])
 
-    # Measure descent from descender glyphs
+    # Descent from descender glyphs
     for ch in descent_glyphs:
         bbox = get_glyph_bbox(ch)
-        if bbox:
-            if bbox[1] < 0:  # ymin below baseline
-                max_descent = max(max_descent, abs(bbox[1]))
+        if bbox and bbox[1] < 0:
+            body_descent = max(body_descent, abs(bbox[1]))
 
-    # Check diacritics — they may push ascent/descent further
+    # Full extent starts from body
+    full_ascent = body_ascent
+    full_descent = body_descent
+
+    # Diacritics push full extent further
     for ch in diacritic_glyphs:
         bbox = get_glyph_bbox(ch)
         if bbox:
-            max_ascent = max(max_ascent, bbox[3])
+            full_ascent = max(full_ascent, bbox[3])
             if bbox[1] < 0:
-                max_descent = max(max_descent, abs(bbox[1]))
+                full_descent = max(full_descent, abs(bbox[1]))
 
-    # If we couldn't measure anything, fall back to font's existing values
-    if max_ascent == 0:
-        max_ascent = font.os2_typoascent
-        logger.warning("Could not measure glyph ascent, using existing os2_typoascent")
-    if max_descent == 0:
-        max_descent = abs(font.os2_typodescent)
-        logger.warning("Could not measure glyph descent, using existing os2_typodescent")
+    # Fallbacks
+    if body_ascent == 0:
+        body_ascent = font.os2_typoascent
+        logger.warning("Could not measure body ascent, using existing os2_typoascent")
+    if body_descent == 0:
+        body_descent = abs(font.os2_typodescent)
+        logger.warning("Could not measure body descent, using existing os2_typodescent")
+    if full_ascent == 0:
+        full_ascent = body_ascent
+    if full_descent == 0:
+        full_descent = body_descent
 
-    # Round up to nearest integer to avoid sub-pixel clipping
-    max_ascent = int(max_ascent + 0.5)
-    max_descent = int(max_descent + 0.5)
+    # Round up
+    body_ascent = int(body_ascent + 0.5)
+    body_descent = int(body_descent + 0.5)
+    full_ascent = int(full_ascent + 0.5)
+    full_descent = int(full_descent + 0.5)
 
-    logger.info(f"Tight metrics: ascent={max_ascent}, descent={max_descent} "
-                f"(total={max_ascent + max_descent}, em={font.em})")
+    logger.info(f"Tight metrics: body={body_ascent}+{body_descent}={body_ascent+body_descent}, "
+                f"full={full_ascent}+{full_descent}={full_ascent+full_descent}, em={font.em}")
 
-    return max_ascent, max_descent
+    return body_ascent, body_descent, full_ascent, full_descent
 
 
-def apply_line_metrics(font, ascent, descent, logger):
-    """Apply line metrics: set typo/hhea to tight values, keep win at max for clipping safety."""
-    # Preserve win metrics at the full em extent (prevents clipping)
-    # win values are the "clipping box" — keep them generous
-    win_ascent = max(font.os2_winascent, ascent)
-    win_descent = max(font.os2_windescent, descent)
+def apply_line_metrics(font, body_ascent, body_descent, full_ascent, full_descent, logger):
+    """Apply line metrics.
 
+    - em (font.ascent/descent) set to body bounds -> controls visual glyph size
+    - typo/hhea set to full bounds -> controls line spacing
+    - win set to max extent -> prevents clipping
+    """
+    # Win metrics: clipping safety
+    win_ascent = max(font.os2_winascent, full_ascent)
+    win_descent = max(font.os2_windescent, full_descent)
     font.os2_winascent = win_ascent
     font.os2_windescent = win_descent
 
-    # Set typo metrics to the tight values (controls line spacing)
-    font.os2_typoascent = ascent
-    font.os2_typodescent = -descent
+    # Typo/hhea: line spacing from full glyph extent
+    font.os2_typoascent = full_ascent
+    font.os2_typodescent = -full_descent
     font.os2_typolinegap = 0
-
-    # Set hhea to match typo (macOS/iOS uses these)
-    font.hhea_ascent = ascent
-    font.hhea_descent = -descent
+    font.hhea_ascent = full_ascent
+    font.hhea_descent = -full_descent
     font.hhea_linegap = 0
 
-    # Fix baseline placement: set internal ascent/descent to match actual glyph bounds
-    # This ensures the baseline sits where the bottom of 'a' is, not shifted
-    old_ascent, old_descent = font.ascent, font.descent
-    font.ascent = ascent
-    font.descent = descent
-    if old_ascent != ascent or old_descent != descent:
-        logger.info(f"Baseline fixed: ascent {old_ascent}->{ascent}, descent {old_descent}->{descent}")
+    # Em square: body bounds -> glyphs render bigger at same point size
+    old_em = font.ascent + font.descent
+    font.ascent = body_ascent
+    font.descent = body_descent
+    new_em = body_ascent + body_descent
 
-    # Enable USE_TYPO_METRICS — tells Windows to use typo metrics for line spacing
     font.os2_use_typo_metrics = True
 
-    logger.info(f"Line metrics applied: typo/hhea={ascent}/{-descent}, "
-                f"win={win_ascent}/{win_descent}, USE_TYPO_METRICS=on")
+    logger.info(f"Em: {old_em} -> {new_em} "
+                f"(ascent {font.ascent}, descent {font.descent})")
+    logger.info(f"Line spacing: {full_ascent}+{full_descent}={full_ascent+full_descent} "
+                f"({(full_ascent+full_descent)/new_em:.3f}x em)")
+    logger.info(f"Win: {win_ascent}/{win_descent}, USE_TYPO_METRICS=on")
 
 
 def setup_logger(debug=False):
@@ -306,12 +312,11 @@ def set_font_metadata(font, family_name, style_info, args, logger):
     
     # Apply line height adjustments
     if args.tighten:
-        ascent, descent = compute_tight_metrics(font, logger)
-        apply_line_metrics(font, ascent, descent, logger)
+        body_asc, body_desc, full_asc, full_desc = compute_tight_metrics(font, logger)
+        apply_line_metrics(font, body_asc, body_desc, full_asc, full_desc, logger)
     elif args.lineheight is not None:
         # Manual line height as fraction of em
         total = int(font.em * args.lineheight)
-        # Split proportionally based on current ascent/descent ratio
         current_total = font.os2_typoascent + abs(font.os2_typodescent)
         if current_total > 0:
             ratio = font.os2_typoascent / current_total
@@ -321,7 +326,7 @@ def set_font_metadata(font, family_name, style_info, args, logger):
         descent = total - ascent
         logger.info(f"Manual line height: {args.lineheight}x em = {total} "
                     f"(ascent={ascent}, descent={descent})")
-        apply_line_metrics(font, ascent, descent, logger)
+        apply_line_metrics(font, ascent, descent, ascent, descent, logger)
 
     logger.debug(f"Font metadata set: {font_name} ({human_name})")
 

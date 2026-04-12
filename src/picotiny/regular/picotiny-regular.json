@@ -6,7 +6,7 @@
 		"ghijklmnopqrstuvwxyz ,.:;?¿!¡|()",
 		"[]{}+-–—*÷_@'%ʻʼ“ˮ#$€£^&°<>~/\\01",
 		"23456789`=\"‘’‚”„‹›«»©®§ČĆŠŽĐčćšž",
-		"đẞß•"
+		"đẞß•█▓▒░"
 	],
 	"glyph-color": "black",
 	"glyph-width": 3,
@@ -45,7 +45,7 @@
 	"font-creation-date": "2025-05-09",
 	"font-creation-time": "17:53",
 	"font-modification-date": "2026-04-11",
-	"font-modification-time": "07:48",
+	"font-modification-time": "11:23",
 	"font-modification-auto": true,
 	"overrides": [
 		"# hide the pixels of the \"space\" characters!",
@@ -57,7 +57,7 @@
 		"ghijklmnopqrstuvwxyz ,.:;?¿!¡|()",
 		"[]{}+-–—*÷_@'%ʻʼ“ˮ#$€£^&°<>~/\\01",
 		"23456789`=\"‘’‚”„‹›«»©®§ČĆŠŽĐčćšž",
-		"đẞß•",
+		"đẞß•█▓▒░",
 		""
 	]
 }

@@ -14,10 +14,10 @@ Three glyph sources are supported:
 Fallback order when source is 'phonetic': phonetic → lowercase → capital
 """
 
+import argparse
+import logging
 import os
 import sys
-import logging
-import argparse
 from pathlib import Path
 
 try:
