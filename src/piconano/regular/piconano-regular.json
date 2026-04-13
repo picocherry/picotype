@@ -4,7 +4,8 @@
 	"in-glyphs": [
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef",
 		"ghijklmnopqrstuvwxyz0123456789.,",
-		":;!?()[]{}=+-×/\\|_&$^°•█▓▒░ "
+		":;!?()[]{}=+-×/\\|_&$^°•█▓▒░%'\"`*",
+		"><@~čćžšđČĆŽŠĐ "
 	],
 	"glyph-color": "auto",
 	"glyph-width": 3,
@@ -44,7 +45,7 @@
 	"font-creation-date": "2026-04-12",
 	"font-creation-time": "09:18",
 	"font-modification-date": "2026-04-12",
-	"font-modification-time": "09:53",
+	"font-modification-time": "14:30",
 	"font-modification-auto": true,
 	"overrides": [
 		"# hide the pixels of the \"space\" characters!",
@@ -55,6 +56,8 @@
 	"font-preview-text": [
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef",
 		"ghijklmnopqrstuvwxyz0123456789.,",
-		":;!?()[]{}=+-×/\\|_&$^°•█▓▒░"
+		":;!?()[]{}=+-×/\\|_&$^°•█▓▒░%'\"`*",
+		"><@~čćžšđČĆŽŠĐ ",
+		""
 	]
 }
