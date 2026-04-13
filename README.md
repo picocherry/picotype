@@ -85,7 +85,7 @@ If you want to run the build youself you can optionally do so too:
 
 To properly build the new font you will need:
 
-- [FontForge](https://fontforge.org/en-US/downloads/mac/) with Python bindings (`brew install fontforge` on macOS, or `sudo apt-get install fontforge on Linux`)
+- [FontForge](https://fontforge.org/en-US/downloads/mac/) with Python bindings (`brew install fontforge` on macOS, or `sudo apt-get install fontforge` on Linux)
 - Python 3
 
 Then run `./build.sh` — an interactive script that will:
