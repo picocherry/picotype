@@ -6,25 +6,25 @@ A collection of pixel fonts for various purposes.
 
 ## `picomono` typeface
 
-`13x7` pixel font: minimal font size that is still very usable for writing code.
+`7x13` pixel font: minimal font size that is still very usable for writing code.
 
 <img src="./assets/picomono.png" width=450>
 
 ## `picotype` typeface
 
-`8×5` pixel font: minimal font size to not have ambiguities, and support multiple weights.
+`5x8` pixel font: minimal font size to not have ambiguities, and support multiple weights.
 
 <img src="./assets/picotype.png" width=450 />
 
 ## `picotypepro` typeface
 
-`10×5` pixel font: a minimal legible font size to to ensure consistent baseline for better legibility.
+`5x10` pixel font: a minimal legible font size to to ensure consistent baseline for better legibility.
 
 <img src="./assets/picotypepro.png" width=450 />
 
 ## `picosans` typeface
 
-`16×8` monospace sans serif pixel font with an italic version.
+`8x16` monospace sans serif pixel font with an italic version.
 
 <img src="./assets/picosans.png" width=450 />
 
@@ -32,19 +32,19 @@ A collection of pixel fonts for various purposes.
 
 ### `picomini` typeface
 
-`7x3` pixel font: a minimal font size that is still legible for both upper and lower case letters, numbers, and all the ASCII symbols.
+`3x7` pixel font: a minimal font size that is still legible for both upper and lower case letters, numbers, and all the ASCII symbols.
 
 <img src="./assets/picomini.png" width=450 />
 
 ### `piconano` typeface
 
-`5x3` pixel font: a minimal font size that is still legible for upper and lower case letters, as well as numbers. Some other ASCII symbols are OK.
+`3x5` pixel font: a minimal font size that is still legible for upper and lower case letters, as well as numbers. Some other ASCII symbols are OK.
 
 <img src="./assets/piconano.png" width=450 />
 
 ### `picopico` typeface
 
-`4x3` pixel font: a truly minimal font size that is still legible for upper and most of the lower case letters, as well as numbers. Very few other ASCII symbols look OK.
+`3x4` pixel font: a truly minimal font size that is still legible for upper and most of the lower case letters, as well as numbers. Very few other ASCII symbols look OK.
 
 <img src="./assets/picopico.png" width=450 />
 
