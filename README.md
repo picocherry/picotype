@@ -28,25 +28,31 @@ A collection of pixel fonts for various purposes.
 
 <img src="./assets/picosans.png" width=450 />
 
-## truly tiny fonts: `mini`, `nano`, and `pico`
+## truly tiny fonts: `micro`, `nano`, `pico`, and `femto`
 
 ### `picomini` typeface
 
-`3x7` pixel font: a minimal font size that is still legible for both upper and lower case letters, numbers, and all the ASCII symbols.
+`3x7` pixel font: a minimal font size that is still legible for both upper and lower case letters, numbers, and all the ASCII symbols. No ambiguities.
 
 <img src="./assets/picomini.png" width=450 />
 
 ### `piconano` typeface
 
-`3x5` pixel font: a minimal font size that is still legible for upper and lower case letters, as well as numbers. Some other ASCII symbols are OK.
+`3x5` pixel font: a minimal font size that is still legible for upper and lower case letters, as well as numbers. Some other ASCII symbols are OK. No ambiguities.
 
 <img src="./assets/piconano.png" width=450 />
 
 ### `picopico` typeface
 
-`3x4` pixel font: a truly minimal font size that is still legible for upper and most of the lower case letters, as well as numbers. Very few other ASCII symbols look OK.
+`3x4` pixel font: a minimal font size that is still legible for upper and most of the lower case letters, as well as numbers. Very few other ASCII symbols look OK. No ambiguities.
 
 <img src="./assets/picopico.png" width=450 />
+
+### `picofemto` typeface
+
+`3x3` pixel font: a minimal font size that is still somewhat legible for upper and some lower case letters and numbers, however it introduces some ambiguity (same glyphs for Z, z, and 2; T and t; 1 and l; Q and q; G and g; O and o, K and k, etc.).
+
+<img src="./assets/picofemto.png" width=450 />
 
 ## Nerdfonts
 
