@@ -22,17 +22,31 @@ A collection of pixel fonts for various purposes.
 
 <img src="./assets/picotypepro.png" width=450 />
 
-## `picotiny` typeface
-
-`7x3` pixel font: a minimal font size that is still legible (more or less).
-
-<img src="./assets/picotiny.png" width=450 />
-
 ## `picosans` typeface
 
 `16×8` monospace sans serif pixel font with an italic version.
 
 <img src="./assets/picosans.png" width=450 />
+
+## truly tiny fonts: `mini`, `nano`, and `pico`
+
+### `picomini` typeface
+
+`7x3` pixel font: a minimal font size that is still legible for both upper and lower case letters, numbers, and all the ASCII symbols.
+
+<img src="./assets/picomini.png" width=450 />
+
+### `piconano` typeface
+
+`5x3` pixel font: a minimal font size that is still legible for upper and lower case letters, as well as numbers. Some other ASCII symbols are OK.
+
+<img src="./assets/piconano.png" width=450 />
+
+### `picopico` typeface
+
+`4x3` pixel font: a truly minimal font size that is still legible for upper and most of the lower case letters, as well as numbers. Very few other ASCII symbols look OK.
+
+<img src="./assets/picopico.png" width=450 />
 
 ## Nerdfonts
 
@@ -65,12 +79,23 @@ The ./src folder structure is the following:
     └── familyname-bolditalic.ttf
 ```
 
-then run
+That is it! Once the PR is in, I will run the build script locally (CI will be added)
 
-`./build.sh`
+If you want to run the build youself you can optionally do so too:
 
-script that will add metadata so that the OS knows all the different files are of the same font family.
-`build.sh` will allow you to choose which font families you want to build, and the options you want to build them with. You will also be able to choose to patch with nerd fonts.
+To properly build the new font you will need:
+
+- [FontForge](https://fontforge.org/en-US/downloads/mac/) with Python bindings (`brew install fontforge` on macOS, or `sudo apt-get install fontforge on Linux`)
+- Python 3
+
+Then run `./build.sh` — an interactive script that will:
+
+1. Let you select which font families to build (space to toggle, `a` to select all)
+2. Configure metadata options (naming, font type, version bump, line height)
+3. Optionally add OpenType features (small caps, old-style figures)
+4. Optionally patch with Nerd Fonts icons
+
+The script adds proper metadata so that the OS recognizes all the different files as belonging to the same font family.
 
 ## Manual editing in FontForge
 

@@ -27,7 +27,7 @@
 	"contour-type": "pixel",
 	"font-type": "ttf",
 	"font-is-upper": false,
-	"font-name": "picotiny-regular",
+	"font-name": "picomini-regular",
 	"font-style": "Regular",
 	"font-author": "pico cherry",
 	"font-copy": "(c) 2026 pico cherry",
@@ -36,9 +36,7 @@
 	"font-desc": "pixel font in a 7x3 grid",
 	"font-license": "(c) 2026 pico cherry",
 	"font-license-url": "",
-	"font-sample-text": [
-		"pico cherry"
-	],
+	"font-sample-text": ["pico cherry"],
 	"font-embedding": "4",
 	"font-weight-class": "500",
 	"font-width-class": "5",

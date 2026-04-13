@@ -1,0 +1,60 @@
+{
+	"$baseURI": "https://yal.cc/r/20/pixelfont/",
+	"$version": "1.0",
+	"in-glyphs": [
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef",
+		"ghijklmnopqrstuvwxyz0123456789.,",
+		":;!?()[]{}=+-×/\\|_&$^°•█▓▒░ "
+	],
+	"glyph-color": "auto",
+	"glyph-width": 3,
+	"glyph-height": 5,
+	"glyph-ofs-x": 0,
+	"glyph-ofs-y": 0,
+	"glyph-sep-x": 1,
+	"glyph-sep-y": 1,
+	"glyph-base-x": 0,
+	"glyph-baseline": 3,
+	"glyph-spacing": 1,
+	"font-is-mono": true,
+	"font-em-square": 1024,
+	"font-line-gap": 0,
+	"font-ascend": 768,
+	"font-descend": -256,
+	"font-px-size": 128,
+	"contour-type": "pixel",
+	"font-type": "ttf",
+	"font-is-upper": false,
+	"font-name": "piconano-regular",
+	"font-style": "Regular",
+	"font-author": "picocherry",
+	"font-copy": "(c) 2026",
+	"font-version-major": 0,
+	"font-version-minor": 0,
+	"font-desc": "3x5 pixel font. Tiniest somewhat legible font for both lower and upper cases",
+	"font-license": "",
+	"font-license-url": "",
+	"font-sample-text": [
+		"picopico!",
+		"THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG"
+	],
+	"font-embedding": "4",
+	"font-weight-class": "400",
+	"font-width-class": "5",
+	"font-creation-date": "2026-04-12",
+	"font-creation-time": "09:18",
+	"font-modification-date": "2026-04-12",
+	"font-modification-time": "09:53",
+	"font-modification-auto": true,
+	"overrides": [
+		"# hide the pixels of the \"space\" characters!",
+		"# (but they'll still have a width)",
+		"hide \\s",
+		""
+	],
+	"font-preview-text": [
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdef",
+		"ghijklmnopqrstuvwxyz0123456789.,",
+		":;!?()[]{}=+-×/\\|_&$^°•█▓▒░"
+	]
+}
