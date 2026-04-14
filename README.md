@@ -34,7 +34,7 @@ A collection of pixel fonts for various purposes.
 
 `3x7` pixel font: a minimal font size that is still legible for both upper and lower case letters, numbers, and all the ASCII symbols. No ambiguities, and straight baseline.
 
-<img src="./assets/picomini.png" width=450 />
+<img src="./assets/picomicro.png" width=450 />
 
 ### `piconano` typeface
 
